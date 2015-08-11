@@ -6,6 +6,7 @@
 .DS_Store
 /build
 /captures
+/.idea
 =======
 # Built application files
 *.apk
@@ -34,3 +35,6 @@ proguard/
 
 # Log Files
 *.log
+
+# IntelliJ project files
+*.iml
