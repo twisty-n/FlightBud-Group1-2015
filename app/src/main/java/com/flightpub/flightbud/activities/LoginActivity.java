@@ -5,8 +5,10 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -15,6 +17,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,8 +31,16 @@ import android.widget.TextView;
 
 import com.flightpub.flightbud.R;
 
+import org.apache.http.HttpStatus;
+import org.apache.http.client.HttpClient;
+
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * A login screen that offers login via email/password.
@@ -54,10 +65,29 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     private View mProgressView;
     private View mLoginFormView;
 
+    // ref to our preferences
+    private SharedPreferences appSettings = null;
+
+    private String logString;
+    {
+        logString = LoginActivity.class.getSimpleName();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        this.getPrefs();
+        if ( appSettings.getBoolean("FIRST_TIME_LAUNCH", true) ) {
+
+            // If the app has been launched before, we dont want to show the login screen
+            // so navigate to the default screen
+            // TODO: implement navigation
+            Log.d(logString, "Application has been launched before, going to main navigation" +
+                    "screen");
+        }
+
 
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
@@ -96,6 +126,15 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         getLoaderManager().initLoader(0, null, this);
     }
 
+    /*
+    Sets up the access to shared preferences for this app
+     */
+    private void getPrefs() {
+        if (this.appSettings == null) {
+            this.appSettings = getSharedPreferences(String.valueOf(R.string.preferences_identifier), 0);
+        }
+    }
+
 
     /**
      * Attempts to sign in or register the account specified by the login form.
@@ -114,6 +153,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
+        boolean loginSuccess = false;
 
         boolean cancel = false;
         View focusView = null;
@@ -143,10 +183,41 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
+            // Addtionally add the email and password to prefs if call was successfull
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+            mAuthTask = new UserLoginTask(email, password, getApplicationContext());
+            try {
+                loginSuccess = mAuthTask.execute((Void) null).get();
+            } catch (InterruptedException e) {
+                //
+            } catch (ExecutionException e) {
+                //
+            }
+            this.saveAccountDetails(email, password);
         }
+
+        if (loginSuccess) {
+            // Navigate to main dashboard
+            Log.i(this.logString, "User credentials correct. Login succeeded");
+        } else {
+            // set the errors
+            Log.i(this.logString, "Error Logging in with supplied credentials Email:" + email + " Password: " + password);
+            mEmailView.setError(getString(R.string.error_invalid_credentials));
+            focusView = mEmailView;
+            focusView.requestFocus();
+        }
+    }
+
+    /*
+    Saves the user account details as shared preferences
+     */
+    private void saveAccountDetails(String email, String password) {
+        this.getPrefs();
+        SharedPreferences.Editor prefsEditor = this.appSettings.edit();
+
+        prefsEditor.putString(getString(R.string.user_email), email);
+        prefsEditor.putString(getString(R.string.user_password), password);
+        prefsEditor.commit();
     }
 
     private boolean isEmailValid(String email) {
@@ -154,7 +225,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     }
 
     private boolean isPasswordValid(String password) {
-        return password.isEmpty();
+        return !password.isEmpty();
     }
 
     /**
@@ -255,33 +326,52 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
         private final String mEmail;
         private final String mPassword;
+        private final Context ctx;
 
-        UserLoginTask(String email, String password) {
+        UserLoginTask(String email, String password, Context ctx) {
             mEmail = email;
             mPassword = password;
+            this.ctx = ctx;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
+            Uri.Builder uriBuilder = Uri.parse("http://192.168.0.12:3000").buildUpon();
+            uriBuilder.appendPath("api")
+                    .appendPath("session")
+                    .appendQueryParameter("email", String.valueOf(mEmail))
+                    .appendQueryParameter("password", mPassword);
+
+            URL url = null;
+            HttpURLConnection urlConnection = null;
+
 
             try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
+                // Open a network connection
+                url = new URL(uriBuilder.build().toString());
+                Log.d(this.getClass().getSimpleName(), "Opening a connection to: " + url.toString());
+                urlConnection = (HttpURLConnection) url.openConnection();
+
+                int responseCode = urlConnection.getResponseCode();
+                if ( responseCode == 201) {
+                    // The network call was a success
+                    // TODO: set up API key usefulness
+                    // TODO: store user credentials as well
+                    Log.i(this.getClass().getSimpleName(), "Login Success. Redirecting");
+                    return true;
+                }
+                // Else, the account login failed
+
+            } catch (MalformedURLException e) {
+                Log.e(this.getClass().getSimpleName(), "Malformed URI: " + uriBuilder.toString());
+                return false;
+            } catch (IOException e) {
+                Log.e(this.getClass().getSimpleName(), "IO error when trying to open network connection");
                 return false;
             }
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
-
-            // TODO: register the new account here.
-            return true;
+            return false;
         }
 
         @Override

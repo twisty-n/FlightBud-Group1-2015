@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">FlightBud</string>
+    <string name="preferences_identifier">FLIGHTBUD_PREFERENCES</string>
 </resources>
