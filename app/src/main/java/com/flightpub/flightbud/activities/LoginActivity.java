@@ -23,6 +23,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.flightpub.flightbud.R;
@@ -84,6 +85,11 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        //testing creating an image
+        ImageView mImageView;
+        mImageView = (ImageView) findViewById(R.id.login_logo);
+        mImageView.setImageResource(R.drawable.flightpublogo);
     }
 
     private void populateAutoComplete() {
