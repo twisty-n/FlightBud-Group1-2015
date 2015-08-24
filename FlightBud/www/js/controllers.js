@@ -1,0 +1,143 @@
+angular.module('starter.controllers', [])
+
+    .controller('FlightManagementCtrl', function($scope, $localstorage, $state, UserFlights) {
+        
+        $scope.flights = UserFlights.all();
+        
+    })
+
+    .controller('NavigationCtrl', function ($scope, $localstorage, $state) {
+
+        // Implement the navigation methods
+        $scope.goToFlights = function () {
+            $state.go('all-flights')
+        };
+        
+        $scope.goToAccount = function() {
+              $state.go('account')
+        };
+        
+        $scope.goToDash = function() {
+              $state.go('dashboard')
+        };
+
+    })
+
+    .controller('DashboardCtrl', function ($scope, $localstorage, $state) {
+    
+        // If the user is not authenicated, redirect
+        $scope.$on('$ionicView.enter', function (e) {
+
+            // If this is the first time the app has been opened,
+            // redirect to login, else show conversations page
+            console.log("Test");
+            if ($localstorage.get('userEmail', 'null') == 'null') {
+                $state.go('login');
+            } 
+    
+            // TODO: whenever we renter the view, refresh the content
+        });
+
+        $scope.doRefresh = function () {
+            // Do a network request to update if needed
+            setTimeout(function () {
+                $scope.$broadcast('scroll.refreshComplete');
+            }, 1000);
+        };
+
+    })
+
+
+/****************************************Imported**************************** */
+/**
+ * Handles all of the settings page
+ */
+    .controller('AccountSettingsCtrl', function ($scope, $localstorage, $state, $log) {
+    
+        /**
+         * On enter of this view, load the user settings
+         */
+        $scope.$on('$ionicView.enter', function (e) {
+            $scope.settings = $localstorage.getObject("userSettings");
+            $log.log("Entering settings page. Current settings: " + $scope.settings);
+        });
+
+        /**
+         * On exit or this view, save the user settings
+         */
+        $scope.$on('$ionicView.leave', function (e) {
+            $log.log($scope.settings);
+            $localstorage.setObject("userSettings", $scope.settings);
+        });
+    
+        /**
+         * The logout function
+         */
+        $scope.logout = function () {
+            $localstorage.set('userEmail', 'null');
+            $localstorage.set('userPassword', 'null');
+            $state.go('dashboard');
+        }
+
+    })
+
+/**
+ * Handles all of the actions required to authenticate a user
+ * with the FlightPub messaging API
+ */
+    .controller('AuthCtrl', function ($scope, 
+        $log, 
+        $localstorage, 
+        $state, 
+        $ionicViewService,
+        $ionicNavBarDelegate) 
+    {
+            
+        // Stop back bar appearing
+        $ionicNavBarDelegate.showBar(false);        
+
+        /**
+         * Performs the user login and the initial application config
+         */
+        $scope.doLogin = function (userCredentials) {
+        
+            // Perform an API request
+            // We'll need to have  a stub here
+            // If successful, save the credenials, and return
+            $log.log(userCredentials.email);
+            $log.log(userCredentials.password);
+            {
+                // This will be in the callback
+            
+                // Save the user details to local storage
+                $localstorage.set('userEmail', userCredentials.email);
+                $localstorage.set('userPassword', userCredentials.password);
+                
+                // Make it so we can't go back to login
+                $ionicViewService.nextViewOptions({
+                    disableBack: true
+                });
+                
+                // Set up initial app stuff
+                if ($localstorage.get('firstOpen', "null") == "null") {
+                    $localstorage.set('firstOpen', false);
+                    $localstorage.setObject("userSettings", {landingPage: true});
+                    $state.go('dashboard')
+                } else {
+                    // Just trust me
+                    $state.go
+                    (
+                        (
+                         $localstorage.getObject("userSettings").landingPage ? 'dashboard' : 'all-flights'   
+                        ) 
+                    )
+                }
+            }
+            // Any device or sessoin key
+            // else, signal error
+            
+            // Set up initial a
+        
+        }
+
+    });

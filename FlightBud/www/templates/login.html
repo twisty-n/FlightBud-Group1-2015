@@ -1,0 +1,29 @@
+<ion-view view-title="Login" hide-nav-bar="true">
+    <ion-content>
+        
+        <!-- Simulate the NavBar -->
+        <div class="bar bar-header bar-calm">
+            <h1 class="title">FlightBud</h1>
+        </div>
+        <div>
+            <div style="width: 95%; margin-left: auto; margin-right: auto;">
+                <img src="img/fp_main.png">
+            </div>
+        </div>
+
+        <div class="list list-inset">
+            <label class="item item-input">
+                <input type="email" placeholder="Email" ng-model="data.email">
+            </label>
+            <label class="item item-input">
+                <input type="password" placeholder="Password" ng-model="data.password">
+            </label>
+        </div>
+        <button class="button button-block button-calm" ng-click="doLogin(data)">Get Started</button>
+        <br/>
+        
+        <p> Have some text here or something. Your companion for the air. </p>
+        <p> <b>ALSO PLEASE UNBREAK ME</b> </p>
+        
+    </ion-content>
+</ion-view>
