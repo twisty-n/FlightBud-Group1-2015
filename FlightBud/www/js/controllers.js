@@ -23,7 +23,8 @@ angular.module('starter.controllers', [])
 
     })
 
-    .controller('DashboardCtrl', function ($scope, $localstorage, $state) {
+/****************************** DASHBOARD CONTROLLER *****************************/
+    .controller('DashboardCtrl', function ($scope, $localstorage, $state, Weather) {
     
         // If the user is not authenicated, redirect
         $scope.$on('$ionicView.enter', function (e) {
@@ -46,7 +47,7 @@ angular.module('starter.controllers', [])
         };
 
     })
-
+/**************************** END DASHBOARD CONTROLLER ***************************/
 
 /****************************************Imported**************************** */
 /**
@@ -120,9 +121,13 @@ angular.module('starter.controllers', [])
                 
                 // Set up initial app stuff
                 if ($localstorage.get('firstOpen', "null") == "null") {
+                    
+                    // We really should defer this to some utiliy function, but whatever
                     $localstorage.set('firstOpen', false);
                     $localstorage.setObject("userSettings", {landingPage: true});
-                    $state.go('dashboard')
+                    $localstorage.setObject("cachedWeather", {});
+                    $state.go('dashboard');
+                    
                 } else {
                     // Just trust me
                     $state.go

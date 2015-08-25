@@ -1,0 +1,23 @@
+//define temperature as fahrenheit
+		        	var temperature = Math.round(((data.main.temp - 273.15) * 1.8) + 32) + '°F';
+		        	
+		        	//define min temperature as fahrenheit
+		        	var minTemperature = Math.round(((data.main.temp_min - 273.15) * 1.8) + 32) + '°F';
+		        	
+		        	//define max temperature as fahrenheit
+		        	var maxTemperature = Math.round(((data.main.temp_max - 273.15) * 1.8) + 32) + '°F';
+	        	
+	        	} else {
+		        	
+		        	//define temperature as celsius
+		        	var temperature = Math.round(data.main.temp - 273.15) + '°C';
+		        	
+		        	//define min temperature as celsius
+		        	var minTemperature = Math.round(data.main.temp_min - 273.15) + '°C';
+		        	
+		        	//define max temperature as celsius
+		        	var maxTemperature = Math.round(data.main.temp_max - 273.15) + '°C';
+					
+					
+// Here is a bunch of code to do the conversions from Kelvin for US
+// Units should be a preferences thing

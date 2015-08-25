@@ -1,0 +1,49 @@
+WeatherForecast : JavaScript Object
+// Note: additional code to support conversion from kelvin into 
+// human units is in scratchfile
+{
+	longitude: 					float
+	latitude: 					float
+	timeObtained: 				UTC time: when we got this forcast
+	fiveDayForecast: 			WeatherObjects * n : n <= 5
+	[ // Start Array
+		} // Start Weather Object
+			utcForecastTime: 	UTC Time: 	The time the forecast is for
+			mainText: 			String: 	E.g. Rain/Storm/Clouds
+			description: 		String:		Short sentance description
+			minTempurature: 	int:		Kelvin min temp
+			maxTempurature: 	int:		Kelvin max temp
+			tempurature: 		int:		Kelvin avg temp
+			icon: 				String:		Path to the icon to use for this weather Obj
+		}	// End WeatherObject
+	] // End Array
+}
+
+Weather Service Functions:
+
+/**
+* Returns cached weather data for a location
+* params:  location: the location to get
+* returns: A WeatherObject for the current location
+* or null if there is no object defined
+*/
+getWeatherSet(location)
+
+/**
+* Explicitly updates the weather set for a location
+*/
+updateWeatherSet(location)
+
+/**
+* Returns an updated weather set if we were able to update
+* or the most recent weather data
+* Will return null if we weren't able to get any data
+* This should be the main method called to get the weather set, 
+* as it will always return the most up to date information
+*/
+getAndUpdateWeatherSet(location) 
+
+/**
+* Clears all cached weather data
+*/
+clearCache()
