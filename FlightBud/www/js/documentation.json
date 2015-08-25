@@ -2,6 +2,7 @@ WeatherForecast : JavaScript Object,
 // Note: additional code to support conversion from kelvin into 
 // human units is in scratchfile
 {
+	location:					String: location
 	longitude: 					float,
 	latitude: 					float,
 	timeObtained: 				UTC time: when we got this forcast,
@@ -48,3 +49,28 @@ getAndUpdateWeatherSet(location)
 */
 clearCache()
 }
+//=======================================================================================================
+Checklist : JavaScript Object
+A checklist is managed by the ChecklistService and is bound to some flightId
+the Checklist Service function documentation can be seen in the checlist service :P
+
+items: 					An array of checklist items
+						checklist item => 	{
+												name: 		String - the name of the item
+												complete:	bool   - is the item complete
+											}
+addItem(itemName): 		Adds a given item to the checklist. completed set to false
+						itemName:	String - the name of the item to be added
+
+removeItem(item):		Removes an item from the checklist
+						item:		the checklist item to be removed 
+						i.e. the key:val tuple 
+
+markAsComplete(item):	Marks a given item as complete
+						item		the checklist item to be marked
+
+totalItems:				Returns the total number of items in the list 
+completeItems: 			Returns the number of complete items
+remainingItems: 		Returns the number of uncomplete items
+percentageComplete: 	Returns as a double the percentage of items that are 
+						complete

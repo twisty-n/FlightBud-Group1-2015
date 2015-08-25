@@ -34,7 +34,13 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
             .state('dashboard', {
                 url: '/dashboard',
                 templateUrl: 'templates/dashboard.html',
-                controller: 'DashboardCtrl'
+                controller: 'DashboardCtrl',
+                resolve: {
+                    weather: function(WeatherService) {
+                        return WeatherService.getAndUpdateWeatherSet("Sydney");
+                    }
+                }
+               
             })
 
             .state('login', {

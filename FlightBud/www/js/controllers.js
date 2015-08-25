@@ -24,7 +24,7 @@ angular.module('starter.controllers', [])
     })
 
 /****************************** DASHBOARD CONTROLLER *****************************/
-    .controller('DashboardCtrl', function ($scope, $localstorage, $state, WeatherService) {
+    .controller('DashboardCtrl', function ($scope, $localstorage, $state, weather) {
     
         // If the user is not authenicated, redirect
         $scope.$on('$ionicView.enter', function (e) {
@@ -45,7 +45,8 @@ angular.module('starter.controllers', [])
                 $scope.$broadcast('scroll.refreshComplete');
             }, 1000);
         };
-
+        
+        $scope.weather = weather;
     })
 /**************************** END DASHBOARD CONTROLLER ***************************/
 

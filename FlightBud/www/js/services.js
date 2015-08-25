@@ -19,6 +19,98 @@ angular.module('starter.services', [])
         };
     }])
     
+    .factory('ChecklistService', function($localstorage) {
+        
+        var newChecklist = function() {
+            
+            return {
+                // Need to load Default checklist Items
+                items: [],
+                addItem: function(itemName) {
+                    this.items.push
+                    (
+                        { 
+                            name: itemName,
+                            completed: false
+                        }
+                    );
+                },
+                removeItem: function(item) {
+                    this.items.splice(this.items.indexOf(item), 1);
+                },
+                markAsComplete: function(item) {
+                    this.items[this.items.indexOf(item)].completed = true;
+                },
+                totalItems: function() {
+                    return this.items.length;
+                },
+                completeItems: function() {
+                    var count = 0;
+                    for (var item in this.items) {
+                        if (item.completed) { count++; }
+                    }
+                    return count;
+                },
+                remainingItems: function() {
+                    return this.totalItems() - this.completedItems();
+                },
+                percentageComplete: function() {
+                    return 100 * (this.completedItems() / this.totalItems());
+                }
+            };
+            
+        };
+        
+        var checklists = $localstorage.getObject("checklists");
+        checklists.save = function() {
+           $localstorage.setObject("checklists", checklists);
+        };
+        
+        return {
+            
+            /**
+             * Removes all currently saved checlists
+             */
+            clearCache: function() {
+                checklists = {};
+                $localstorage.setObject("checklists", {});
+            },
+            
+            /**
+             * Creates and returns a new checklist bound to flight ID
+             * The checklist is also saved
+             */
+            createNewChecklist: function(flightId) {
+                var checklist = newChecklist();
+                checklists.flightId = checklist;
+                checklists.save();
+                return checklist;
+            },
+            
+            /**
+             * Removes a given checklist
+             */
+            removeChecklist: function(flightId) {
+                delete checklists.flightId;
+                checklists.save();
+            },
+            
+            /**
+             * Returns a checklist bound to a flightId
+             * If no checklist exists, then a checklist is created
+             */
+            retrieveChecklist: function(flightId) {
+                if (checklists.flightId == undefined) { 
+                    checklists.flightId = newChecklist();
+                    checklists.save();
+                 }
+                return checklists.fightId;
+            }
+            
+        }
+        
+    })
+    
     .factory('FlightsService', function() {
         
         var flights = [
@@ -159,6 +251,7 @@ angular.module('starter.services', [])
             var weatherObject = {};
             weatherObject = // Create our own custom object
             {
+                location: jsonObject.city.name,
                 longitude: jsonObject.city.coord.lon,
                 latitude: jsonObject.city.coord.lat,
                 timeObtained: Date.now(),
@@ -285,6 +378,7 @@ angular.module('starter.services', [])
 
             clearCache: function() {
                 // clear the cache of LocationInformation
+                
             }
 
         };
