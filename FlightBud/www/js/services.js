@@ -133,7 +133,7 @@ angular.module('starter.services', [])
                 destination: 'Singapore',
                 departureTime: 12.45,       // Mocked for now. Deal with same as Ember
                 arrivalTime: 8.46,
-                flightCode: "JQ456"
+                flightCode: "BUTTS6"
             },
             
             {
@@ -144,7 +144,7 @@ angular.module('starter.services', [])
                 destination: 'Singapore',
                 departureTime: 12.45,       // Mocked for now. Deal with same as Ember
                 arrivalTime: 8.46,
-                flightCode: "JQ456"
+                flightCode: "I am amazing"
             },
             
             {
@@ -155,7 +155,7 @@ angular.module('starter.services', [])
                 destination: 'Singapore',
                 departureTime: 12.45,       // Mocked for now. Deal with same as Ember
                 arrivalTime: 8.46,
-                flightCode: "JQ456"
+                flightCode: "I am a stegosaurus"
             }
         ]
         
@@ -187,6 +187,10 @@ angular.module('starter.services', [])
             },
             clearCache: function() {
                 // Dump all
+            },
+            nextFlightToLeave: function() {
+                // Assume its at the tip of the array
+                return flights[0];
             }
         }
         

@@ -1,3 +1,5 @@
+/// <reference path="../../typings/tsd.d.ts" />
+
 // Ionic Starter App
 
 // angular.module is a global place for creating, registering and retrieving Angular modules
@@ -32,12 +34,21 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         $stateProvider
 
             .state('dashboard', {
-                url: '/dashboard',
+                url: '/dashboard/:flightId',
+                params: {
+                    flightId: -1    // Set default to -1 if none provided
+                },
                 templateUrl: 'templates/dashboard.html',
                 controller: 'DashboardCtrl',
                 resolve: {
                     weather: function(WeatherService) {
                         return WeatherService.getAndUpdateWeatherSet("Sydney");
+                    },
+                    flight: function(FlightsService, $stateParams) {
+                        // Handle the no route case. Defaults to first flight
+                        // TODO: test this logic works
+                        if ($stateParams.flightId == -1) { return FlightsService.getNextFlight(); }
+                        return FlightsService.get($stateParams.flightId);
                     }
                 }
                

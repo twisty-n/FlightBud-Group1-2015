@@ -3,7 +3,7 @@
         <ion-refresher pulling-text="Pull to refresh..." spinner="lines" on-refresh="doRefresh()">
         </ion-refresher>
         <ion-list>
-            <ion-item class="item-remove-animate item-icon-right" ng-repeat="flight in flights" type="item-text-wrap" href="#">
+            <ion-item class="item-remove-animate item-icon-right" ng-repeat="flight in flights" type="item-text-wrap" href="#/dashboard/{{flight.id}}">
                 <!-- Do nothing for now, we will have a link to the dash with an ID referencing the flight -->
                 <i class="ion-social-freebsd-devil"></i><h2>{{flight.flightCode}}</h2>
 
