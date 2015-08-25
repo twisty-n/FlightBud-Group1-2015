@@ -1,11 +1,11 @@
-WeatherForecast : JavaScript Object
+WeatherForecast : JavaScript Object,
 // Note: additional code to support conversion from kelvin into 
 // human units is in scratchfile
 {
-	longitude: 					float
-	latitude: 					float
-	timeObtained: 				UTC time: when we got this forcast
-	fiveDayForecast: 			WeatherObjects * n : n <= 5
+	longitude: 					float,
+	latitude: 					float,
+	timeObtained: 				UTC time: when we got this forcast,
+	fiveDayForecast: 			WeatherObjects * n : n <= 5,
 	[ // Start Array
 		} // Start Weather Object
 			utcForecastTime: 	UTC Time: 	The time the forecast is for
@@ -47,3 +47,4 @@ getAndUpdateWeatherSet(location)
 * Clears all cached weather data
 */
 clearCache()
+}

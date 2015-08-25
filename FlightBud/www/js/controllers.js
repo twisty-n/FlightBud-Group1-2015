@@ -1,8 +1,8 @@
 angular.module('starter.controllers', [])
 
-    .controller('FlightManagementCtrl', function($scope, $localstorage, $state, UserFlights) {
+    .controller('FlightManagementCtrl', function($scope, $localstorage, $state, FlightsService) {
         
-        $scope.flights = UserFlights.all();
+        $scope.flights = FlightsService.all();
         
     })
 
@@ -24,7 +24,7 @@ angular.module('starter.controllers', [])
     })
 
 /****************************** DASHBOARD CONTROLLER *****************************/
-    .controller('DashboardCtrl', function ($scope, $localstorage, $state, Weather) {
+    .controller('DashboardCtrl', function ($scope, $localstorage, $state, WeatherService) {
     
         // If the user is not authenicated, redirect
         $scope.$on('$ionicView.enter', function (e) {
@@ -53,7 +53,15 @@ angular.module('starter.controllers', [])
 /**
  * Handles all of the settings page
  */
-    .controller('AccountSettingsCtrl', function ($scope, $localstorage, $state, $log) {
+    .controller('AccountSettingsCtrl', function (
+        $scope, 
+        $localstorage, 
+        $state, 
+        $log,
+        $ionicPopup,
+        FlightsService,
+        WeatherService,
+        LocationInformationService) {
     
         /**
          * On enter of this view, load the user settings
@@ -78,8 +86,29 @@ angular.module('starter.controllers', [])
             $localstorage.set('userEmail', 'null');
             $localstorage.set('userPassword', 'null');
             $state.go('dashboard');
-        }
-
+        };
+        
+        $scope.clearCache = function() {
+            FlightsService.clearCache();
+            WeatherService.clearCache();
+            LocationInformationService.clearCache();
+        };
+        
+        $scope.showConfirm = function () {
+            var confirmPopup = $ionicPopup.confirm({
+                title: 'Confirm Cache Clear',
+                template: 'Are you sure you want to remove all cache information from device?'
+            });
+            confirmPopup.then(function (res) {
+                if (res) {
+                    $scope.clearCache();
+                } else {
+                   // Do nothing
+                }
+            });
+        };
+        
+       
     })
 
 /**

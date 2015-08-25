@@ -16,10 +16,10 @@ angular.module('starter.services', [])
             getObject: function (key) {
                 return JSON.parse($window.localStorage[key] || '{}');
             }
-        }
+        };
     }])
     
-    .factory('UserFlights', function() {
+    .factory('FlightsService', function() {
         
         var flights = [
             {
@@ -92,12 +92,15 @@ angular.module('starter.services', [])
                     }
                 }
                 return null;
+            },
+            clearCache: function() {
+                // Dump all
             }
         }
         
     })
     
-    .factory('Weather', function($http, $localstorage, $log) {
+    .factory('WeatherService', function($http, $localstorage, $log) {
         
         // This API will give us the weather for a particular location
         var openWeatherApi = "http://api.openweathermap.org/data/2.5/forecast?q=";
@@ -115,6 +118,7 @@ angular.module('starter.services', [])
         
         var lookup = function(iconCode) {
             var iconName = "butts";
+            // Inefficient IF cascade
             //if icon is clear sky
             if(iconCode == '01d' || iconCode == '01n') {
                 iconName = 'clear';
@@ -212,7 +216,7 @@ angular.module('starter.services', [])
                     );
                     
                     if (response.data.cod == "404") {
-                        return false;
+                        return cachedWeather[location];
                     }
                     
                     parseAndStoreWeatherResponse(location, response.data);
@@ -224,7 +228,7 @@ angular.module('starter.services', [])
                         + error.status
                         + error.statusText 
                     );
-                    return null;
+                    return cachedWeather[location];
                 });
         }
         
@@ -270,7 +274,19 @@ angular.module('starter.services', [])
                 $localstorage.setObject("cachedWeather", {});
             }
             
-        }
-        
-        
+        };
+         
     })
+    
+    .factory('LocationInformationService', function () {
+
+        var apiUrl = URL;
+        return {
+
+            clearCache: function() {
+                // clear the cache of LocationInformation
+            }
+
+        };
+      
+    });
