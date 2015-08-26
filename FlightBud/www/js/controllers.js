@@ -24,7 +24,7 @@ angular.module('starter.controllers', [])
     })
 
 /****************************** DASHBOARD CONTROLLER *****************************/
-    .controller('DashboardCtrl', function ($scope, $localstorage, $state, weather, flight) {
+    .controller('DashboardCtrl', function ($scope, $localstorage, $state, weather, flight, $log) {
     
         // If the user is not authenicated, redirect
         $scope.$on('$ionicView.enter', function (e) {
@@ -38,6 +38,10 @@ angular.module('starter.controllers', [])
     
             // TODO: whenever we renter the view, refresh the content
         });
+        
+        $scope.flight = flight;
+        $scope.weather = weather;
+        $scope.currentWeatherView = weather.currentWeather;
 
         $scope.doRefresh = function () {
             // Do a network request to update if needed
@@ -46,8 +50,20 @@ angular.module('starter.controllers', [])
             }, 1000);
         };
         
-        $scope.flight = flight;
-        $scope.weather = weather;
+        $scope.updateWeatherView = function(weatherIdentifier) {
+            $log.log("Updating the weather view with weather unit" + weatherIdentifier);
+            var newView = null;
+            var weatherArray = $scope.weather.fiveDayForecast;
+            for (var i=0; i < weatherArray.length; i++) {
+                if ( weatherArray[i].utcForecastTime == weatherIdentifier ) {
+                    newView = weatherArray[i];
+                    break;
+                }
+            }
+            $scope.currentWeatherView = newView;
+        };
+        
+
     })
 /**************************** END DASHBOARD CONTROLLER ***************************/
 

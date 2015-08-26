@@ -14,35 +14,38 @@
 
 		<div class="item item-avatar">
 			<!-- Demo using data loaded by our controller -->
-			<h2>{{weather.location}} Forecast</h2>
-			<p>{{weather.currentWeather.utcForecastTime}}</p>
+			<img class="" src="img/weather/weather-large.png">
+			<h2>{{flight.destination}} Weather Conditions. </h2>
+			<p>for?Time : {{currentWeatherView.utcForecastTime}}</p>
 		</div>
-		
+		<!-- TODO: Change to use a placeholder variable
+			That will allow us to update the information in place  -->
 		<div class="item item-body">
-			<img class="" src="img/delorean.jpg">
+			<img class="" src="{{currentWeatherView.icon}}">
+			<h2>!Float to left of Icon! {{currentWeatherView.mainText}}</h2>
 			<p>
-				Probably have some sotck weather symbol, and then our weather informatin
-				I will load the weather in correctly once I have flights linked and working :)
+				description: 		String:		Short sentance description
+				minTempurature: 	int:		Kelvin min temp
+				maxTempurature: 	int:		Kelvin max temp
+				tempurature: 		int:		Kelvin avg temp
+				Ill leave these for you Al!
 			</p>
 		</div>
 		
-		<div class="item tabs tabs-secondary tabs-icon-left">
+		I'll leave you to pretty this up. But all the logic is there for 
+		inline updating :)'
+		
+		<div class="item tabs tabs-secondary tabs-icon-left"> 
 			<!-- These can be little clickable Icons which change the content in the panel
 				above. That way we dont need a seperate view. The icon Would be a styled 
 				version ofthe day part of the date like 27th 28th
 				for each of the forecast days that we have -->
-			<a class="tab-item" href="#">
-				<i class="icon ion-thumbsup"></i>
-				Like
-			</a>
-			<a class="tab-item" href="#">
-				<i class="icon ion-chatbox"></i>
-				Comment
-			</a>
-			<a class="tab-item" href="#">
-				<i class="icon ion-share"></i>
-				Share
-			</a>
+			<div ng-repeat="forecast in weather.fiveDayForecast">
+				<a class="tab-item" href="#" ng-click='updateWeatherView("{{forecast.utcForecastTime}}")'>
+					<i class="icon ion-sun"/> 
+					{{forecast.displayDay}}th <!-- handle rd st -->
+				</a>
+			</div>
 		</div>
 
 	</div>

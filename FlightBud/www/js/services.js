@@ -242,7 +242,7 @@ angular.module('starter.services', [])
             if (iconName == "butts") {
                 iconName = "unknown";
             }
-            iconName = "img/" + iconName;
+            iconName = "img/weather/" + iconName;
             iconName += '.png'
             return iconName;
         };
@@ -269,6 +269,8 @@ angular.module('starter.services', [])
                 if ( i % 12 == 0 ) {
                     // Get this dataum and add it
                     var weatherDatum = jsonObject.list[i];
+                    var d = Date.parse(weatherDatum.dt_txt);
+                    var date = new Date(d);
                     weatherObject.fiveDayForecast.push
                     (
                         {
@@ -278,7 +280,8 @@ angular.module('starter.services', [])
                             minTempurature: weatherDatum.main.temp_min,
                             maxTempurature: weatherDatum.main.temp_max,
                             tempurature: weatherDatum.main.temp,
-                            icon: lookup(weatherDatum.weather[0].icon)
+                            icon: lookup(weatherDatum.weather[0].icon),
+                            displayDay: date.getDate()
                         }
                     ) // Close push
                 }
