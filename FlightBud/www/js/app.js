@@ -40,16 +40,22 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                 },
                 templateUrl: 'templates/dashboard.html',
                 controller: 'DashboardCtrl',
-                resolve: {
-                    weather: function(WeatherService) {
-                        return WeatherService.getAndUpdateWeatherSet("Sydney");
-                    },
+                resolve: {                    
                     flight: function(FlightsService, $stateParams) {
                         // Handle the no route case. Defaults to first flight
                         // TODO: test this logic works
                         if ($stateParams.flightId == -1) { return FlightsService.getNextFlight(); }
                         return FlightsService.get($stateParams.flightId);
-                    }
+                    },
+                    weather: function(WeatherService, FlightsService, $stateParams) {
+                        var flightId = $stateParams.flightId;
+                        return WeatherService.getAndUpdateWeatherSet
+                        (
+                                (flightId != 1) ? 
+                                FlightsService.get(flightId).destination : 
+                                FlightsService.nextFlightToLeave().destination
+                        );
+                    },
                 }
                
             })

@@ -119,7 +119,7 @@ angular.module('starter.services', [])
                 price: 123.45,
                 flight_time: 180, // I can't remember how we stored these, you can deal :P
                 origin: 'Bangkok',
-                destination: 'Singapore',
+                destination: 'Sydney',
                 departureTime: 12.45,       // Mocked for now. Deal with same as Ember
                 arrivalTime: 8.46,
                 flightCode: "JQ456"
