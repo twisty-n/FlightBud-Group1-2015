@@ -27,7 +27,7 @@ angular.module('starter.controllers', [])
     })
 
 /****************************** DASHBOARD CONTROLLER *****************************/
-    .controller('DashboardCtrl', function ($scope, $localstorage, $state, weather, flight, $log) {
+    .controller('DashboardCtrl', function ($scope, $localstorage, $state, weather, flight, $log, checklist) {
     
         // If the user is not authenicated, redirect
         $scope.$on('$ionicView.enter', function (e) {
@@ -41,11 +41,20 @@ angular.module('starter.controllers', [])
             // TODO: whenever we renter the view, refresh the content
         });
         
+        // Set up variables
         $scope.flight = flight;
         $scope.weather = weather;
         $scope.currentWeatherView = weather.currentWeather;
         
-        $scope.viewList = [ 1, 2,3,4,5 ];
+        // Checlist vars
+        $scope.checklist = checklist; // The full checklist
+        $scope.viewLists = {
+            health: checklist.categories.health.categoryItems,
+            finance: checklist.categories.finance.categoryItems,
+            security: checklist.categories.health.categoryItems,
+            packing: checklist.categories.packing.categoryItems,
+            my_items: checklist.categories.my_items.categoryItems
+        }
 
         $scope.doRefresh = function () {
             // Do a network request to update if needed
@@ -177,6 +186,7 @@ angular.module('starter.controllers', [])
                     $localstorage.set('firstOpen', false);
                     $localstorage.setObject("userSettings", {landingPage: true});
                     $localstorage.setObject("cachedWeather", {});
+                    $localstorage.setObject("checklists", {});
                     $state.go('dashboard');
                     
                 } else {

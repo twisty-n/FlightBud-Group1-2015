@@ -60,13 +60,20 @@
 			<!-- Additionally apply blue to the text colour -->
 			<p>Complete: 10      Pending: 6     <b>Total: 16</b></p>
 		</div>
+		
 		<!-- The actual checklist -->
-		<div class="list list-inset">
-			<div class="item" ng-repeat="item in viewList">
-				Raiders of the Lost Ark
+		<div ng-repeat="(categoryKey, checklist) in checklist.categories">
+			<div class="item item-divider">
+    			{{checklist.categoryName}}
+			</div>
+			<div class="list list-inset {{categoryKey}}">
+				<div class="item" ng-repeat="item in viewLists[categoryKey]">
+					{{item.name}}
+				</div>
 			</div>
 		</div>
 		<!-- End list -->
+		
 		<!-- Teh modifiers -->
 		<div class="item tabs tabs-secondary tabs-icon-left"> 
 			<a class="tab-item" href="#" ng-click="showPendingTasks()">

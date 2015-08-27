@@ -1,0 +1,91 @@
+[
+	{
+		"categoryName": "Health and Wellbeing",
+		"categoryItems": [
+			{
+				"name": "Organise your trip with FlightBud",
+				"completed": true	
+			},
+			{
+				"name": "Organise travel insurance",
+				"completed": false
+			},
+			{
+				"name": "Research destination medical advice",
+				"completed": false
+			},
+			{
+				"name": "Get all needed vaccinations",
+				"completed":  false
+			}
+		] 
+	},
+	{
+		"categoryName": "Finances",
+		"categoryItems": [
+			{
+				"name": "Organise local currency",
+				"completed": false
+			},
+			{
+				"name": "Talk to financial institution about cards and currencies",
+				"completed": false
+			}
+		] 
+	},
+	{
+		"categoryName": "Security",
+		"categoryItems": [
+			{
+				"name": "Email trip details to self and family",
+				"completed": false
+			},
+			{
+				"name": "Copy and scan important documents such as passport, flight details, identification",
+				"completed": false
+			}
+		] 
+	},
+	{
+		"categoryName": "Things to Pack",
+		"categoryItems": [
+			{
+				"name": "Toothbrush and toiletries",
+				"completed": false
+			},
+			{
+				"name": "Electronics and chargers",
+				"completed": false
+			},
+			{
+				"name": "Camera and film/memory cards",
+				"completed": false
+			},
+			{
+				"name": "Camera and film/memory cards",
+				"completed": false
+			},
+			{
+				"name": "International adapters",
+				"completed": false
+			}, 
+			{
+				"name": "Gifts, business items or incedentals",
+				"completed": false
+			},
+			{
+				"name": "Phrase book and travel guide",
+				"completed": false
+			}
+		] 
+	},
+	{
+		"categoryName": "My Items",
+		"categoryItems": [
+			{
+				"name": "Organise an adventure with FlightHub. Your travel experts!",
+				"completed": true
+			}
+		] 
+	}
+]

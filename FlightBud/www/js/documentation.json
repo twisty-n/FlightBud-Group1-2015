@@ -54,6 +54,8 @@ Checklist : JavaScript Object
 A checklist is managed by the ChecklistService and is bound to some flightId
 the Checklist Service function documentation can be seen in the checlist service :P
 
+// OUT OF DATE
+
 items: 					An array of checklist items
 						checklist item => 	{
 												name: 		String - the name of the item

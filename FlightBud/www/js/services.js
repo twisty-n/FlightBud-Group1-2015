@@ -23,33 +23,180 @@ angular.module('starter.services', [])
         
         var newChecklist = function() {
             
-            return {
-                // Need to load Default checklist Items
-                items: [],
+            return { 
+                categories: {
+                    health: {
+                                categoryName: "Health and Wellbeing",
+                                categoryItems: [
+                                    {
+                                        name: "Organise your trip with FlightBud",
+                                        completed: true	
+                                    },
+                                    {
+                                        name: "Organise travel insurance",
+                                        completed: false
+                                    },
+                                    {
+                                        name: "Research destination medical advice",
+                                        completed: false
+                                    },
+                                    {
+                                        name: "Get all needed vaccinations",
+                                        completed:  false
+                                    }
+                                ],
+                                completeItems: function() {
+                                    this.categoryItems.filter( function(value) {
+                                        return value.completed;
+                                    } );
+                                },
+                                pendingItems: function() {
+                                    this.categoryItems.filter( function(value) {
+                                        return !value.completed;
+                                    } );
+                                } 
+                            },
+                finance: 	{
+                                categoryName: "Finances",
+                                categoryItems: [
+                                    {
+                                        name: "Organise local currency",
+                                        completed: false
+                                    },
+                                    {
+                                        name: "Talk to financial institution about cards and currencies",
+                                        completed: false
+                                    }
+                                ],
+                                completeItems: function() {
+                                    this.categoryItems.filter( function(value) {
+                                        return value.completed;
+                                    } );
+                                },
+                                pendingItems: function() {
+                                    this.categoryItems.filter( function(value) {
+                                        return !value.completed;
+                                    } );
+                                } 
+                            },
+                security: {
+                                categoryName: "Security",
+                                categoryItems: [
+                                    {
+                                        name: "Email trip details to self and family",
+                                        completed: false
+                                    },
+                                    {
+                                        name: "Copy and scan important documents such as passport, flight details, identification",
+                                        completed: false
+                                    }
+                                ],
+                                completeItems: function() {
+                                    this.categoryItems.filter( function(value) {
+                                        return value.completed;
+                                    } );
+                                },
+                                pendingItems: function() {
+                                    this.categoryItems.filter( function(value) {
+                                        return !value.completed;
+                                    } );
+                                } 
+                            },
+                packing:  {
+                                categoryName: "Things to Pack",
+                                categoryItems: [
+                                    {
+                                        name: "Toothbrush and toiletries",
+                                        completed: false
+                                    },
+                                    {
+                                        name: "Electronics and chargers",
+                                        completed: false
+                                    },
+                                    {
+                                        name: "Camera and film/memory cards",
+                                        completed: false
+                                    },
+                                    {
+                                        name: "Camera and film/memory cards",
+                                        completed: false
+                                    },
+                                    {
+                                        name: "International adapters",
+                                        completed: false
+                                    }, 
+                                    {
+                                        name: "Gifts, business items or incedentals",
+                                        completed: false
+                                    },
+                                    {
+                                        name: "Phrase book and travel guide",
+                                        completed: false
+                                    }
+                                ],
+                                completeItems: function() {
+                                    this.categoryItems.filter( function(value) {
+                                        return value.completed;
+                                    } );
+                                },
+                                pendingItems: function() {
+                                    this.categoryItems.filter( function(value) {
+                                        return !value.completed;
+                                    } );
+                                } 
+                            },
+                my_items:  {
+                                categoryName: "My Items",
+                                categoryItems: [
+                                    {
+                                        name: "Organise an adventure with FlightHub. Your travel experts!",
+                                        completed: true
+                                    }
+                                ],
+                                completeItems: function() {
+                                    this.categoryItems.filter( function(value) {
+                                        return value.completed;
+                                    } );
+                                },
+                                pendingItems: function() {
+                                    this.categoryItems.filter( function(value) {
+                                        return !value.completed;
+                                    } );
+                                } 
+                            }},
                 addItem: function(itemName) {
-                    this.items.push
-                    (
-                        { 
-                            name: itemName,
-                            completed: false
+                    this.categories.my_items.categoryItems.push(
+                        {
+                                name: "Organise an adventure with FlightHub. Your travel experts!",
+                                completed: true
                         }
                     );
                 },
+                // Will always fail. No removing items at the moment
+                completedItems: 0,
                 removeItem: function(item) {
-                    this.items.splice(this.items.indexOf(item), 1);
+                    return false;
+                    //this.items.splice(this.items.indexOf(item), 1);
                 },
-                markAsComplete: function(item) {
-                    this.items[this.items.indexOf(item)].completed = true;
+                markAsComplete: function(itemName, itemCategory) {
+                    var items = this.categories[itemCategory].categoryItems;
+                    for (var i = 0; i<items.length; i++) {
+                        if ( items[i].name == itemName ) {
+                            items[i].completed = true;
+                            break;
+                        }
+                    }
+                    this.completedItems++;
                 },
                 totalItems: function() {
-                    return this.items.length;
+                    return  this.categories.health.categoryItems.length      +
+                            this.categories.finances.categoryItems.length    +
+                            this.categories.security.categoryItems.length    +
+                            this.categories.packing.categoryItems.length     +
+                            this.categories.my_items.categoryItems.length;
                 },
                 completeItems: function() {
-                    var count = 0;
-                    for (var item in this.items) {
-                        if (item.completed) { count++; }
-                    }
-                    return count;
+                    return this.completedItems;
                 },
                 remainingItems: function() {
                     return this.totalItems() - this.completedItems();
@@ -82,7 +229,7 @@ angular.module('starter.services', [])
              */
             createNewChecklist: function(flightId) {
                 var checklist = newChecklist();
-                checklists.flightId = checklist;
+                checklists[flightId] = checklist;
                 checklists.save();
                 return checklist;
             },
@@ -91,7 +238,7 @@ angular.module('starter.services', [])
              * Removes a given checklist
              */
             removeChecklist: function(flightId) {
-                delete checklists.flightId;
+                delete checklists[flightId];
                 checklists.save();
             },
             
@@ -100,13 +247,16 @@ angular.module('starter.services', [])
              * If no checklist exists, then a checklist is created
              */
             retrieveChecklist: function(flightId) {
-                if (checklists.flightId == undefined) { 
-                    checklists.flightId = newChecklist();
+                if (checklists[flightId] == undefined) { 
+                    checklists[flightId] = newChecklist();
                     checklists.save();
                  }
-                return checklists.fightId;
+                return checklists[flightId];
+            },
+            saveChecklist: function(flightId, checklist) {
+                checklists[flightId] = checklist;
+                checklists.save();
             }
-            
         }
         
     })

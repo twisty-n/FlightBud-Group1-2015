@@ -56,6 +56,14 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                                 FlightsService.nextFlightToLeave().destination
                         );
                     },
+                    checklist: function(ChecklistService, $stateParams, FlightsService) {
+                        var flightId = $stateParams.flightId;                        
+                        return ChecklistService.retrieveChecklist(
+                            (flightId != -1) ? 
+                                flightId : 
+                                FlightsService.nextFlightToLeave().id
+                        );
+                    }
                 }
                
             })
