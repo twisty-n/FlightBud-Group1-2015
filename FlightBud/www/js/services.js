@@ -21,8 +21,7 @@ angular.module('starter.services', [])
     
     .factory('ChecklistService', function($localstorage) {
         
-        var newChecklist = function() {
-            
+        var newChecklist =  function() { 
             return { 
                 categories: {
                     health: {
@@ -44,17 +43,7 @@ angular.module('starter.services', [])
                                         name: "Get all needed vaccinations",
                                         completed:  false
                                     }
-                                ],
-                                completeItems: function() {
-                                    this.categoryItems.filter( function(value) {
-                                        return value.completed;
-                                    } );
-                                },
-                                pendingItems: function() {
-                                    this.categoryItems.filter( function(value) {
-                                        return !value.completed;
-                                    } );
-                                } 
+                                ] 
                             },
                 finance: 	{
                                 categoryName: "Finances",
@@ -67,17 +56,7 @@ angular.module('starter.services', [])
                                         name: "Talk to financial institution about cards and currencies",
                                         completed: false
                                     }
-                                ],
-                                completeItems: function() {
-                                    this.categoryItems.filter( function(value) {
-                                        return value.completed;
-                                    } );
-                                },
-                                pendingItems: function() {
-                                    this.categoryItems.filter( function(value) {
-                                        return !value.completed;
-                                    } );
-                                } 
+                                ] 
                             },
                 security: {
                                 categoryName: "Security",
@@ -90,17 +69,7 @@ angular.module('starter.services', [])
                                         name: "Copy and scan important documents such as passport, flight details, identification",
                                         completed: false
                                     }
-                                ],
-                                completeItems: function() {
-                                    this.categoryItems.filter( function(value) {
-                                        return value.completed;
-                                    } );
-                                },
-                                pendingItems: function() {
-                                    this.categoryItems.filter( function(value) {
-                                        return !value.completed;
-                                    } );
-                                } 
+                                ] 
                             },
                 packing:  {
                                 categoryName: "Things to Pack",
@@ -133,17 +102,7 @@ angular.module('starter.services', [])
                                         name: "Phrase book and travel guide",
                                         completed: false
                                     }
-                                ],
-                                completeItems: function() {
-                                    this.categoryItems.filter( function(value) {
-                                        return value.completed;
-                                    } );
-                                },
-                                pendingItems: function() {
-                                    this.categoryItems.filter( function(value) {
-                                        return !value.completed;
-                                    } );
-                                } 
+                                ] 
                             },
                 my_items:  {
                                 categoryName: "My Items",
@@ -152,62 +111,13 @@ angular.module('starter.services', [])
                                         name: "Organise an adventure with FlightHub. Your travel experts!",
                                         completed: true
                                     }
-                                ],
-                                completeItems: function() {
-                                    this.categoryItems.filter( function(value) {
-                                        return value.completed;
-                                    } );
-                                },
-                                pendingItems: function() {
-                                    this.categoryItems.filter( function(value) {
-                                        return !value.completed;
-                                    } );
-                                } 
-                            }},
-                addItem: function(itemName) {
-                    this.categories.my_items.categoryItems.push(
-                        {
-                                name: "Organise an adventure with FlightHub. Your travel experts!",
-                                completed: true
-                        }
-                    );
+                                ] 
+                            }
                 },
-                // Will always fail. No removing items at the moment
                 completedItems: 0,
-                removeItem: function(item) {
-                    return false;
-                    //this.items.splice(this.items.indexOf(item), 1);
-                },
-                markAsComplete: function(itemName, itemCategory) {
-                    var items = this.categories[itemCategory].categoryItems;
-                    for (var i = 0; i<items.length; i++) {
-                        if ( items[i].name == itemName ) {
-                            items[i].completed = true;
-                            break;
-                        }
-                    }
-                    this.completedItems++;
-                },
-                totalItems: function() {
-                    return  this.categories.health.categoryItems.length      +
-                            this.categories.finances.categoryItems.length    +
-                            this.categories.security.categoryItems.length    +
-                            this.categories.packing.categoryItems.length     +
-                            this.categories.my_items.categoryItems.length;
-                },
-                completeItems: function() {
-                    return this.completedItems;
-                },
-                remainingItems: function() {
-                    return this.totalItems() - this.completedItems();
-                },
-                percentageComplete: function() {
-                    return 100 * (this.completedItems() / this.totalItems());
-                }
             };
-            
         };
-        
+            
         var checklists = $localstorage.getObject("checklists");
         checklists.save = function() {
            $localstorage.setObject("checklists", checklists);
@@ -222,18 +132,6 @@ angular.module('starter.services', [])
                 checklists = {};
                 $localstorage.setObject("checklists", {});
             },
-            
-            /**
-             * Creates and returns a new checklist bound to flight ID
-             * The checklist is also saved
-             */
-            createNewChecklist: function(flightId) {
-                var checklist = newChecklist();
-                checklists[flightId] = checklist;
-                checklists.save();
-                return checklist;
-            },
-            
             /**
              * Removes a given checklist
              */
@@ -241,17 +139,60 @@ angular.module('starter.services', [])
                 delete checklists[flightId];
                 checklists.save();
             },
-            
             /**
              * Returns a checklist bound to a flightId
              * If no checklist exists, then a checklist is created
              */
             retrieveChecklist: function(flightId) {
+                
                 if (checklists[flightId] == undefined) { 
                     checklists[flightId] = newChecklist();
                     checklists.save();
                  }
-                return checklists[flightId];
+                 
+                 var checklist = checklists[flightId];
+                 
+                 // Add methods to the checklist
+                checklist.addItem = function(itemName) {
+                    checklist.categories.my_items.categoryItems.push(
+                        {
+                                name: "Organise an adventure with FlightHub. Your travel experts!",
+                                completed: true
+                        }
+                    );
+                };
+                // Will always fail. No removing items at the moment
+                checklist.removeItem = function(item) {
+                    return false;
+                    //this.items.splice(this.items.indexOf(item), 1);
+                };
+                checklist.markAsComplete = function(itemName, itemCategory) {
+                    var items = checklist.categories[itemCategory].categoryItems;
+                    for (var i = 0; i<items.length; i++) {
+                        if ( items[i].name == itemName ) {
+                            items[i].completed = true;
+                            break;
+                        }
+                    }
+                    checklist.completedItems++;
+                };
+                checklist.totalItems = function() {
+                    return  checklist.categories.health.categoryItems.length      +
+                            checklist.categories.finance.categoryItems.length    +
+                            checklist.categories.security.categoryItems.length    +
+                            checklist.categories.packing.categoryItems.length     +
+                            checklist.categories.my_items.categoryItems.length;
+                };
+                checklist.completeItems = function() {
+                    return checklist.completedItems;
+                };
+                checklist.remainingItems = function() {
+                    return checklist.totalItems() - checklist.completeItems();
+                };
+                checklist.percentageComplete = function() {
+                    return 100 * (checklist.completeItems() / checklist.totalItems());
+                };
+                return checklist;
             },
             saveChecklist: function(flightId, checklist) {
                 checklists[flightId] = checklist;

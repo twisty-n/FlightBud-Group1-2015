@@ -58,18 +58,19 @@
 			<h2>My {{flight.flightCode}} Checklist</h2>
 			<!-- Update the bolded element to show the current list -->
 			<!-- Additionally apply blue to the text colour -->
-			<p>Complete: 10      Pending: 6     <b>Total: 16</b></p>
+			<p>Complete: {{checklist.completeItems()}}      Pending: {{checklist.remainingItems()}}     <b>Total: {{checklist.totalItems()}}</b></p>
 		</div>
 		
 		<!-- The actual checklist -->
 		<div ng-repeat="(categoryKey, checklist) in checklist.categories">
-			<div class="item item-divider">
-    			{{checklist.categoryName}}
+			<div class="item item-divider item-icon-right" ng-click="toggleListCategoryView(categoryKey)">
+    			<i id="{{categoryKey}}" class="ion-arrow-right-c"></i>
+				{{checklist.categoryName}}
 			</div>
-			<div class="list list-inset {{categoryKey}}">
-				<div class="item" ng-repeat="item in viewLists[categoryKey]">
+			<div class="list list-inset" ng-show="{{categoryKey}}View">
+				<a class="item" ng-repeat="item in viewLists[categoryKey]" ng-click="completeItem('{{item.name}}', '{{categoryKey}}')">
 					{{item.name}}
-				</div>
+				</a>
 			</div>
 		</div>
 		<!-- End list -->

@@ -27,7 +27,8 @@ angular.module('starter.controllers', [])
     })
 
 /****************************** DASHBOARD CONTROLLER *****************************/
-    .controller('DashboardCtrl', function ($scope, $localstorage, $state, weather, flight, $log, checklist) {
+    .controller('DashboardCtrl', function ($scope, $localstorage, 
+        $state, weather, flight, $log, checklist, ChecklistService) {
     
         // If the user is not authenicated, redirect
         $scope.$on('$ionicView.enter', function (e) {
@@ -51,10 +52,20 @@ angular.module('starter.controllers', [])
         $scope.viewLists = {
             health: checklist.categories.health.categoryItems,
             finance: checklist.categories.finance.categoryItems,
-            security: checklist.categories.health.categoryItems,
+            security: checklist.categories.security.categoryItems,
             packing: checklist.categories.packing.categoryItems,
             my_items: checklist.categories.my_items.categoryItems
-        }
+        },
+        
+        $scope.toggleListCategoryView = function(categoryKey) {
+            $scope[categoryKey+"View"] = !$scope[categoryKey+"View"];
+        },
+        
+        $scope.completeItem = function(itemName, category) {
+            checklist.markAsComplete(itemName, category);
+            // Show the item as completed
+            ChecklistService.saveChecklist(flight.id, $scope.checklist);
+        },
 
         $scope.doRefresh = function () {
             // Do a network request to update if needed
