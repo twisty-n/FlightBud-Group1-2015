@@ -84,7 +84,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                 (window.localStorage["userSettings"] == undefined) ? '/dash' :
                     (
                         (window.localStorage["userSettings"].landingPage != "dash") ?
-                        '/flights' : '/dash'
+                        '/flights' : '/dashboard'
                     )
             )
         ); // End otherwise

@@ -180,7 +180,8 @@ angular.module('starter.controllers', [])
                     $state.go
                     (
                         (
-                         $localstorage.getObject("userSettings").landingPage ? 'dashboard' : 'all-flights'   
+                          ($localstorage.get("userSettings").landingPage != "dash") ?
+                        'all-flights' : 'dashboard'
                         ) 
                     )
                 }
