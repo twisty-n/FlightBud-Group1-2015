@@ -10,8 +10,8 @@
 	  <h1>Flight ID: {{flight.id}}</h1>
 	  <h1>Flight Code: {{flight.flightCode}}</h1>
 	  
+	<!-- Weather Card  -->  
 	<div class="list card" >
-
 		<div class="item item-avatar">
 			<!-- Demo using data loaded by our controller -->
 			<img class="" src="img/weather/weather-large.png">
@@ -47,14 +47,33 @@
 				</a>
 			</div>
 		</div>
-
 	</div>
+	<!-- End weather card -->
     
-	<div class="card">
-  		<div class="item item-text-wrap">
-    		This is a basic Card which contains an item that has wrapping text.
-  		</div>
+	<!-- Checklist Card -->
+	<div class="list card" >
+		<div class="item item-avatar">
+			<!-- Demo using data loaded by our controller -->
+			<img class="" src="img/blue_tick.png">
+			<h2>My {{flight.flightCode}} Checklist</h2>
+			<!-- Update the bolded element to show the current list -->
+			<!-- Additionally apply blue to the text colour -->
+			<p>Complete: 10      Pending: 6     <b>Total: 16</b></p>
+		</div>
+		<!-- TODO: Change to use a placeholder variable
+			That will allow us to update the information in place  -->
+		<div class="item item-body">
+			A button to add an item
+			
+			A list of items that can be marked off
+			
+		</div>
+		<div class="item tabs tabs-secondary tabs-icon-left"> 
+			3 Icons, remaining, complete and all
+		</div>
+		</div>
 	</div>
+	<!-- End checklist card  -->
 	
 	<div class="card">
   		<div class="item item-text-wrap">
