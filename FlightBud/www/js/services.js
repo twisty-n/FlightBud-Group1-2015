@@ -203,9 +203,9 @@ angular.module('starter.services', [])
         
         // Cached weather stores the currently cached weather results for an array of countries
         var cachedWeather = $localstorage.getObject("cachedWeather");
-        cachedWeather.save = function() {
+        var saveWeather = function() {
            $localstorage.setObject("cachedWeather", cachedWeather);
-        }
+        };
         
         // Returns true if a location is currently cached
         var inCache = function(location) {
@@ -299,7 +299,7 @@ angular.module('starter.services', [])
         var parseAndStoreWeatherResponse = function(location, weatherJson) {
             var weatherObject = parseWeatherResponse(weatherJson);
             cachedWeather[location] = weatherObject;
-            cachedWeather.save();
+            saveWeather();
         };
         
         var doUpdateWeatherSet = function(location) {
