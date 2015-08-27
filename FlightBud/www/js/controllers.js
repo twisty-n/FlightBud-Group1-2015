@@ -42,6 +42,15 @@ angular.module('starter.controllers', [])
             // TODO: whenever we renter the view, refresh the content
         });
         
+        $scope.$on('$ionicView.leave', function (e) {
+            ChecklistService.saveChecklist($scope.flight.id, $scope.checklist);
+            $scope.flight = null;
+            $scope.weather = null;
+            $scope.currentWeatherView = null;
+            $scope.viewLists = null;
+            $scope.checklist = null;
+        });
+        
         // Set up variables
         $scope.flight = flight;
         $scope.weather = weather;
@@ -63,8 +72,37 @@ angular.module('starter.controllers', [])
         
         $scope.completeItem = function(itemName, category) {
             checklist.markAsComplete(itemName, category);
-            // Show the item as completed
-            ChecklistService.saveChecklist(flight.id, $scope.checklist);
+        },
+        
+        
+        $scope.showPendingTasks = function() {
+            $scope.viewLists = {
+                health: checklist.categories.health.categoryItems.filter( function(item) { return item.completed == false; } ),
+                finance: checklist.categories.finance.categoryItems.filter( function(item) { return item.completed == false; } ),
+                security: checklist.categories.security.categoryItems.filter( function(item) { return item.completed == false; } ),
+                packing: checklist.categories.packing.categoryItems.filter( function(item) { return item.completed == false; } ),
+                my_items: checklist.categories.my_items.categoryItems.filter( function(item) { return item.completed == false; } )
+            };
+        },
+        
+        $scope.showCompletedTasks = function() {
+            $scope.viewLists = {
+                health: checklist.categories.health.categoryItems.filter( function(item) { return item.completed != false; } ),
+                finance: checklist.categories.finance.categoryItems.filter( function(item) { return item.completed != false; } ),
+                security: checklist.categories.security.categoryItems.filter( function(item) { return item.completed != false; } ),
+                packing: checklist.categories.packing.categoryItems.filter( function(item) { return item.completed != false; } ),
+                my_items: checklist.categories.my_items.categoryItems.filter( function(item) { return item.completed != false; } )
+            };
+        },
+        
+        $scope.showAllTasks = function() {
+            $scope.viewLists = {
+                health: checklist.categories.health.categoryItems,
+                finance: checklist.categories.finance.categoryItems,
+                security: checklist.categories.security.categoryItems,
+                packing: checklist.categories.packing.categoryItems,
+                my_items: checklist.categories.my_items.categoryItems
+            };
         },
 
         $scope.doRefresh = function () {
