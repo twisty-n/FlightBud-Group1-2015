@@ -2,6 +2,9 @@ angular.module('starter.controllers', [])
 
     .controller('FlightManagementCtrl', function($scope, $localstorage, $state, FlightsService) {
         
+        if ($localstorage.get('userEmail', "null") == "null") {
+                $state.go('login');
+        }
         $scope.flights = FlightsService.all();
         
     })
@@ -31,8 +34,7 @@ angular.module('starter.controllers', [])
 
             // If this is the first time the app has been opened,
             // redirect to login, else show conversations page
-            console.log("Test");
-            if ($localstorage.get('userEmail', 'null') == 'null') {
+            if ($localstorage.get('userEmail', "null") == "null") {
                 $state.go('login');
             } 
     
@@ -103,7 +105,7 @@ angular.module('starter.controllers', [])
         $scope.logout = function () {
             $localstorage.set('userEmail', 'null');
             $localstorage.set('userPassword', 'null');
-            $state.go('dashboard');
+            $state.go('login');
         };
         
         $scope.clearCache = function() {
@@ -158,8 +160,8 @@ angular.module('starter.controllers', [])
                 // This will be in the callback
             
                 // Save the user details to local storage
-                $localstorage.set('userEmail', userCredentials.email);
-                $localstorage.set('userPassword', userCredentials.password);
+                $localstorage.set('userEmail',      userCredentials.email);
+                $localstorage.set('userPassword',   userCredentials.password);
                 
                 // Make it so we can't go back to login
                 $ionicViewService.nextViewOptions({
@@ -180,7 +182,7 @@ angular.module('starter.controllers', [])
                     $state.go
                     (
                         (
-                          ($localstorage.get("userSettings").landingPage != "dash") ?
+                          ($localstorage.getObject("userSettings").landingPage != true) ?
                         'all-flights' : 'dashboard'
                         ) 
                     )

@@ -44,14 +44,14 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                     flight: function(FlightsService, $stateParams) {
                         // Handle the no route case. Defaults to first flight
                         // TODO: test this logic works
-                        if ($stateParams.flightId == -1) { return FlightsService.getNextFlight(); }
+                        if ($stateParams.flightId == -1) { return FlightsService.nextFlightToLeave(); }
                         return FlightsService.get($stateParams.flightId);
                     },
                     weather: function(WeatherService, FlightsService, $stateParams) {
                         var flightId = $stateParams.flightId;
                         return WeatherService.getAndUpdateWeatherSet
                         (
-                                (flightId != 1) ? 
+                                (flightId != -1) ? 
                                 FlightsService.get(flightId).destination : 
                                 FlightsService.nextFlightToLeave().destination
                         );
@@ -83,7 +83,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
             (
                 (window.localStorage["userSettings"] == undefined) ? '/dash' :
                     (
-                        (window.localStorage["userSettings"].landingPage != "dash") ?
+                        (JSON.parse(window.localStorage["userSettings"]).landingPage != true) ?
                         '/flights' : '/dashboard'
                     )
             )
