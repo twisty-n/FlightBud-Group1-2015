@@ -68,7 +68,10 @@
 				{{checklist.categoryName}}
 			</div>
 			<div class="list list-inset" ng-show="{{categoryKey}}View">
-				<a class="item" ng-repeat="item in viewLists[categoryKey]" ng-click="completeItem('{{item.name}}', '{{categoryKey}}')">
+				<a class="item {{(item.completed==true)?'balanced-bg':'stable-bg'}}"
+					ng-repeat="item in viewLists[categoryKey]" 
+					style="background-colour:{{(item.completed==true)?'balanced':'stable'}}"
+					ng-click="completeItem('{{item.name}}', '{{categoryKey}}')">
 					{{item.name}}
 				</a>
 			</div>

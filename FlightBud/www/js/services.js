@@ -169,12 +169,12 @@ angular.module('starter.services', [])
                 checklist.markAsComplete = function(itemName, itemCategory) {
                     var items = checklist.categories[itemCategory].categoryItems;
                     for (var i = 0; i<items.length; i++) {
-                        if ( items[i].name == itemName ) {
+                        if ( items[i].name == itemName && items[i].completed == false ) {
+                            checklist.completedItems++;
                             items[i].completed = true;
                             break;
                         }
                     }
-                    checklist.completedItems++;
                 };
                 checklist.totalItems = function() {
                     return  checklist.categories.health.categoryItems.length      +
