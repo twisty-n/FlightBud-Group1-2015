@@ -60,16 +60,27 @@
 			<!-- Additionally apply blue to the text colour -->
 			<p>Complete: 10      Pending: 6     <b>Total: 16</b></p>
 		</div>
-		<!-- TODO: Change to use a placeholder variable
-			That will allow us to update the information in place  -->
-		<div class="item item-body">
-			A button to add an item
-			
-			A list of items that can be marked off
-			
+		<!-- The actual checklist -->
+		<div class="list list-inset">
+			<div class="item" ng-repeat="item in viewList">
+				Raiders of the Lost Ark
+			</div>
 		</div>
+		<!-- End list -->
+		<!-- Teh modifiers -->
 		<div class="item tabs tabs-secondary tabs-icon-left"> 
-			3 Icons, remaining, complete and all
+			<a class="tab-item" href="#" ng-click="showPendingTasks()">
+				<i class="icon ion-android-checkbox-outline-blank"></i>
+				Pending
+			</a>
+			<a class="tab-item" href="#" ng-click="showCompletedTasks()">
+				<i class="icon ion-android-checkbox-outline"></i>
+				Completed
+			</a>
+			<a class="tab-item" href="#" ng-click="showAllTasks()">
+				<i class="icon ion-ios-list"></i>
+				All tasks
+			</a>
 		</div>
 		</div>
 	</div>

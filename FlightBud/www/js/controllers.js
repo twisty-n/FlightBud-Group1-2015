@@ -44,6 +44,8 @@ angular.module('starter.controllers', [])
         $scope.flight = flight;
         $scope.weather = weather;
         $scope.currentWeatherView = weather.currentWeather;
+        
+        $scope.viewList = [ 1, 2,3,4,5 ];
 
         $scope.doRefresh = function () {
             // Do a network request to update if needed
