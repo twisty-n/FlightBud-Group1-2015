@@ -54,7 +54,7 @@
 	<div class="list card" >
 		<div class="item item-avatar">
 			<!-- Demo using data loaded by our controller -->
-			<img class="" src="img/blue_tick.png">
+			<img class="" src="img/blue_tick.jpg">
 			<h2>My {{flight.flightCode}} Checklist</h2>
 			<!-- Update the bolded element to show the current list -->
 			<!-- Additionally apply blue to the text colour -->
@@ -67,7 +67,7 @@
     			<i id="{{categoryKey}}" class="ion-arrow-right-c"></i>
 				{{checklist.categoryName}}
 			</div>
-			<div class="list list-inset" ng-show="{{categoryKey}}View">
+			<div class="list" ng-show="{{categoryKey}}View">
 				<a class="item {{(item.completed==true)?'balanced-bg':'stable-bg'}}"
 					ng-repeat="item in viewLists[categoryKey]" 
 					style="background-colour:{{(item.completed==true)?'balanced':'stable'}}"
