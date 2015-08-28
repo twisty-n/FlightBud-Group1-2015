@@ -67,8 +67,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                     locationListing: function(LocationInformationService, $stateParams, FlightsService) {
                         var flightId = $stateParams.flightId;
                         var destination = ((flightId != -1) ? FlightsService.get(flightId) : FlightsService.nextFlightToLeave()).destination;
-                        return LocationInformationService.getListing(destination);                       
-                        
+                        return LocationInformationService.getListing(destination);
                     }
                 }
             })

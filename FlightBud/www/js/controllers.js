@@ -28,7 +28,7 @@ angular.module('starter.controllers', [])
 
 /****************************** DASHBOARD CONTROLLER *****************************/
     .controller('DashboardCtrl', function ($scope, $localstorage, 
-        $state, weather, flight, $log, checklist, ChecklistService) {
+        $state, weather, flight, $log, checklist, ChecklistService, locationListing) {
     
         // If the user is not authenicated, redirect
         $scope.$on('$ionicView.enter', function (e) {
@@ -55,6 +55,7 @@ angular.module('starter.controllers', [])
         $scope.flight = flight;
         $scope.weather = weather;
         $scope.currentWeatherView = weather.currentWeather;
+        $scope.locationListing = locationListing;
         
         // Checlist vars
         $scope.checklist = checklist; // The full checklist

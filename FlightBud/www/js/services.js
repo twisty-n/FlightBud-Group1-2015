@@ -478,12 +478,14 @@ angular.module('starter.services', [])
     .factory('LocationInformationService', ['OauthSignature', 
                                             '$http', 
                                             '$localstorage', 
-                                            '$log', 
+                                            '$log',
+                                            '$q', 
     function (
         OauthSignature, 
         $http, 
         $localstorage,
-        $log
+        $log,
+        $q
     ) {
 
         // Configure all of the values that we'll need to work with
@@ -533,8 +535,8 @@ angular.module('starter.services', [])
                 listing.snippetText = business.snippet_text;
                 listing.phoneNumber = business.display_phone;
                 listing.coordinates = {
-                    latitude: business.coordinate.latitude,
-                    longitude: business.coordinate.longitude
+                    latitude: business.location.coordinate.latitude,
+                    longitude: business.location.coordinate.longitude
                 }
                 allListings.push(listing);
             }
@@ -542,7 +544,32 @@ angular.module('starter.services', [])
             // Persist the data
             cachedListings[location][searchCategory] = allListings;
             saveLocationListings();
+            return allListings;
         };
+        
+        var getDataForLocationAndCategory = function(location, category) {
+                var searchTerm = category;
+                var params = getParams(
+                    location.replace(" ", "+"), 
+                    searchTerm
+                );
+                var signature = OauthSignature.generate(
+                    method, url, 
+                    params, consumerSecret, 
+                    tokenSecret, {encodeSignature:false}
+                );
+                params['oauth_signature'] = signature;
+                return $http.jsonp(url, {params: params}).then(function(response) {
+                     return parseYelpData(location, searchTerm, response.data);
+                });
+        };
+        
+        var queryYelpForLocation = function(location) {
+            return searchCategories.map(function(category) {
+               return getDataForLocationAndCategory(location, category); 
+            });
+            
+        }
         
         return {
 
@@ -560,38 +587,12 @@ angular.module('starter.services', [])
                 
                 // Do this shit if we don't have cached listings
                 // We will do four call, one for each of the search categories
-                var length = searchCategories.length;
-                for (var i = 0; i < length; i++) {
-                    var searchTerm = searchCategories[i];
-                    var params = getParams(
-                        location.replace(" ", "+"), 
-                        searchTerm
-                    );
-                    var signature = OauthSignature.generate(
-                        method, url, 
-                        params, consumerSecret, 
-                        tokenSecret, {encodeSignature:false}
-                    );
-                    params['oauth_signature'] = signature;
-                    var log = $log;
-                    $http.jsonp(url, {params: params}).success(function(response) {
-                        log.log("Got city listing:" + searchTerm +" for " + location);
-                        if (response.data.cod == "404") {
-                            return null;
-                        }
-                        cachedListings[location] = {};
-                        parseYelpData(location, searchCategories[i], response.data);
-                        return cachedListings[location];
-                    }, function(error) {
-                        log.log
-                        (
-                            "Error updating listing data " 
-                            + error.text
-                            + error.description
-                        );
-                        return null;
-                    });              
-                }
+                var yelpCalls = queryYelpForLocation(location);
+                var _location = location;
+                cachedListings[_location] = {};
+                return $q.all(yelpCalls).then(function(results) {
+                    return cachedListings[_location];
+                });
             }
         };
     }])
