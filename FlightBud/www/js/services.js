@@ -559,16 +559,13 @@ angular.module('starter.services', [])
                     tokenSecret, {encodeSignature:false}
                 );
                 params['oauth_signature'] = signature;
-                return $http.jsonp(url, {params: params}).then(function(response) {
-                     return parseYelpData(location, searchTerm, response.data);
-                });
+                return $http.jsonp(url, {params: params});
         };
         
         var queryYelpForLocation = function(location) {
             return searchCategories.map(function(category) {
-               return getDataForLocationAndCategory(location, category); 
+               return { category: getDataForLocationAndCategory(location, category) }; 
             });
-            
         }
         
         return {
