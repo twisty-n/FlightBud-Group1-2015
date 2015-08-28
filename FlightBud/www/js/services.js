@@ -2,6 +2,10 @@
 
 angular.module('starter.services', [])
 
+    .factory('OauthSignature', ['$window', function($window) {
+        return $window.oauthSignature;
+    }])
+
     .factory('$localstorage', ['$window', function ($window) {
         return {
             set: function (key, value) {
@@ -168,7 +172,8 @@ angular.module('starter.services', [])
                 };
                 checklist.markAsComplete = function(itemName, itemCategory) {
                     var items = checklist.categories[itemCategory].categoryItems;
-                    for (var i = 0; i<items.length; i++) {
+                    var length = items.length;
+                    for (var i = 0; i<length; i++) {
                         if ( items[i].name == itemName && items[i].completed == false ) {
                             checklist.completedItems++;
                             items[i].completed = true;
@@ -356,7 +361,8 @@ angular.module('starter.services', [])
             // Loop over 60 forcast items, grabbing the 0 - 48th 5 times to make
             // an approx weekly forecast, so we take the next most recont multiple of
             // 12
-            for (var i=0; (i <= 48 && i < jsonObject.list.length) ; i++) {
+            var length = jsonObject.list.length
+            for (var i=0; (i <= 48 && i < length); i++) {
                 if ( i % 12 == 0 ) {
                     // Get this dataum and add it
                     var weatherDatum = jsonObject.list[i];
@@ -469,16 +475,123 @@ angular.module('starter.services', [])
          
     })
     
-    .factory('LocationInformationService', function () {
+    .factory('LocationInformationService', ['OauthSignature', 
+                                            '$http', 
+                                            '$localstorage', 
+                                            '$log', 
+    function (
+        OauthSignature, 
+        $http, 
+        $localstorage,
+        $log
+    ) {
 
-        var apiUrl = URL;
+        // Configure all of the values that we'll need to work with
+        // In order to access the API
+        var method = 'GET';
+        var url = 'http://api.yelp.com/v2/search';
+        var randomString = function(length, chars) {
+              var result = '';
+                for (var i = length; i > 0; --i) {
+                    result += chars[Math.round(Math.random() * (chars.length - 1))];
+                } 
+                return result;
+        };
+        var getParams = function(_location, _term) {
+            return {
+                callback: 'angular.callbacks._1',
+                location: _location,                         // Need to set before use
+                limit: '10',
+                term: _term,                             // Need to set before use
+                oauth_consumer_key: 'dCT_TJt3lI9tGVXLOSakFg', //Consumer Key
+                oauth_token: 'PTCY-icFeGp-d3GAbwVrwg5_ZiwRazRT', //Token                
+                oauth_signature_method: 'HMAC-SHA1',
+                oauth_timestamp: new Date().getTime(),                  // Need to set before use
+                oauth_nonce: randomString(32, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
+            }
+        };
+        var consumerSecret = 'hf5p2RO2KcatJCAVaNJ9eJ1EnZs'; // Bad dev!
+        var tokenSecret = 'xyBFeTMNREO8HkqJ9XotYlvkqzs';     // Bad dev!
+        var searchCategories = [ "accomodation", "transportation", "dining", "attractions" ];
+        
+        // Now set up the stuff we need to cache the data locally and parse the return yep JSON
+        var cachedListings = $localstorage.getObject('cachedListings');
+        var saveLocationListings = function() {
+            $localstorage.setObject('cachedListings', cachedListings);
+        };
+        
+        var parseYelpData = function(location, searchCategory, jsonObject) {
+            var businesses = jsonObject.businesses;
+            var allListings = [];
+            var busLength = businesses.length;
+            for (var i=0; i < busLength; i++) {
+                var business = businesses[i];
+                var listing = {};
+                listing.name = business.name;
+                listing.rating = business.rating;
+                listing.url = business.mobile_url;
+                listing.snippetText = business.snippet_text;
+                listing.phoneNumber = business.display_phone;
+                listing.coordinates = {
+                    latitude: business.coordinate.latitude,
+                    longitude: business.coordinate.longitude
+                }
+                allListings.push(listing);
+            }
+            
+            // Persist the data
+            cachedListings[location][searchCategory] = allListings;
+            saveLocationListings();
+        };
+        
         return {
 
             clearCache: function() {
                 // clear the cache of LocationInformation
                 
+            },
+            
+            /**
+             * Returns an object containing the city listing information for a location
+             * If the information was not able to be generated, method will
+             * return null
+             */
+            getListing: function(location) {
+                
+                // Do this shit if we don't have cached listings
+                // We will do four call, one for each of the search categories
+                var length = searchCategories.length;
+                for (var i = 0; i < length; i++) {
+                    var searchTerm = searchCategories[i];
+                    var params = getParams(
+                        location.replace(" ", "+"), 
+                        searchTerm
+                    );
+                    var signature = OauthSignature.generate(
+                        method, url, 
+                        params, consumerSecret, 
+                        tokenSecret, {encodeSignature:false}
+                    );
+                    params['oauth_signature'] = signature;
+                    var log = $log;
+                    $http.jsonp(url, {params: params}).success(function(response) {
+                        log.log("Got city listing:" + searchTerm +" for " + location);
+                        if (response.data.cod == "404") {
+                            return null;
+                        }
+                        cachedListings[location] = {};
+                        parseYelpData(location, searchCategories[i], response.data);
+                        return cachedListings[location];
+                    }, function(error) {
+                        log.log
+                        (
+                            "Error updating listing data " 
+                            + error.text
+                            + error.description
+                        );
+                        return null;
+                    });              
+                }
             }
-
         };
-      
-    });
+    }])

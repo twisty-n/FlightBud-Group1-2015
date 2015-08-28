@@ -235,6 +235,7 @@ angular.module('starter.controllers', [])
                     $localstorage.set('firstOpen', false);
                     $localstorage.setObject("userSettings", {landingPage: true});
                     $localstorage.setObject("cachedWeather", {});
+                    $localstorage.setObject("cachedListings", {});
                     $localstorage.setObject("checklists", {});
                     $state.go('dashboard');
                     
