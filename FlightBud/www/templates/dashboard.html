@@ -62,7 +62,9 @@
 		</div>
 		
 		<!-- The actual checklist -->
-		<div ng-repeat="(categoryKey, checklist) in checklist.categories">
+		<div ng-repeat="(categoryKey, checklist) in checklist.categories"
+				on-swipe-left="cycleCurrentChecklist(true)"
+				on-swipe-right='cycleCurrentChecklist(false)'>
 			<div class="item item-divider item-icon-right" ng-click="toggleListCategoryView(categoryKey)">
     			<i id="{{categoryKey}}" class="ion-arrow-right-c"></i>
 				{{checklist.categoryName}}

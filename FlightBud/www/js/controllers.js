@@ -84,7 +84,7 @@ angular.module('starter.controllers', [])
             }
             swipedLeft ? $scope.changeListingView('dining') : 0;
  
-        }
+        };
         
         // Checlist vars
         $scope.checklist = checklist; // The full checklist
@@ -94,7 +94,20 @@ angular.module('starter.controllers', [])
             security: checklist.categories.security.categoryItems,
             packing: checklist.categories.packing.categoryItems,
             my_items: checklist.categories.my_items.categoryItems
-        },
+        };
+        
+        $scope.cycleCurrentChecklist = function(swipedLeft) {
+            if ($scope.currentCheckListView == 'all') {
+                !swipedLeft ? $scope.showCompletedTasks() : 0;
+                return;
+            }
+            if ($scope.currentCheckListView == 'completed') {
+                swipedLeft ? $scope.showAllTasks() : 
+                $scope.showPendingTasks();
+                return
+            }
+            swipedLeft ? $scope.showCompletedTasks() : 0;
+        };
         
         $scope.toggleListCategoryView = function(categoryKey) {
             $scope[categoryKey+"View"] = !$scope[categoryKey+"View"];
@@ -107,11 +120,11 @@ angular.module('starter.controllers', [])
                 elem.addClass('ion-arrow-right-c');
                 elem.removeClass('ion-arrow-down-c');
             }
-        },
+        };
         $scope.completeItem = function(itemName, category) {
             checklist.markAsComplete(itemName, category);
             $scope.refreshList();
-        },
+        };
         
         $scope.refreshList = function() {
             if ($scope.currentCheckListView == 'all') {$scope.showAllTasks(); return;}
