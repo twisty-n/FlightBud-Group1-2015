@@ -117,11 +117,13 @@
 			<div class="list" 
 				on-swipe-left="cycleCurrentView(true)"
 				on-swipe-right='cycleCurrentView(false)'>
-				<a class="item"
+				<a class="item item-avatar"
 					ng-repeat="pointOfInterest in currentListingView.list" 
 					style="background-colour: stable"
 					ng-click="viewDetail(listingId)">
+					<img class="" src="img/rating/{{pointOfInterest.rating}}.png">
 					{{pointOfInterest.name}}
+					{{pointOfInterest.rating}}
 				</a>
 			</div>
 		</div>
