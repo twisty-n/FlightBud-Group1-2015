@@ -605,11 +605,11 @@ angular.module('starter.services', [])
              * return null
              */
             getListingForCategory: function(location, cateory) {
-                /*
+                
                 if (cachedListings[location] != undefined) {
                     return cachedListings[location];
                 }
-                */
+                
                 // Do this shit if we don't have cached listings
                 // We will do four call, one for each of the search categories
                 $q.all(fireQueries(location)).then(function(results) {

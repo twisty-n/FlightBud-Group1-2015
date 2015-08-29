@@ -53,7 +53,7 @@ angular.module('starter.controllers', [])
             flight = null;
             weather = null;
             $scope.currentWeatherView = null;
-            viewLists = null;
+            $scope.viewLists = null;
             checklist = null;
         });
         
