@@ -485,9 +485,11 @@ angular.module('starter.services', [])
         $http, 
         $localstorage,
         $log,
-        $q
+        $q,
+        $window
     ) {
-
+        
+        // Prepare yourself for all of the fucking hax
         // Configure all of the values that we'll need to work with
         // In order to access the API
         var method = 'GET';
@@ -500,8 +502,9 @@ angular.module('starter.services', [])
                 return result;
         };
         var getParams = function(_location, _term) {
+            var callbackId = angular.callbacks.counter;
             return {
-                callback: 'angular.callbacks._1',
+                callback: 'angular.callbacks._' + callbackId,
                 location: _location,                         // Need to set before use
                 limit: '10',
                 term: _term,                             // Need to set before use
@@ -514,13 +517,6 @@ angular.module('starter.services', [])
         };
         var consumerSecret = 'hf5p2RO2KcatJCAVaNJ9eJ1EnZs'; // Bad dev!
         var tokenSecret = 'xyBFeTMNREO8HkqJ9XotYlvkqzs';     // Bad dev!
-        var searchCategories = [ "accomodation", "transportation", "dining", "attractions" ];
-        
-        // Now set up the stuff we need to cache the data locally and parse the return yep JSON
-        var cachedListings = $localstorage.getObject('cachedListings');
-        var saveLocationListings = function() {
-            $localstorage.setObject('cachedListings', cachedListings);
-        };
         
         var parseYelpData = function(location, searchCategory, jsonObject) {
             var businesses = jsonObject.businesses;
@@ -541,9 +537,6 @@ angular.module('starter.services', [])
                 allListings.push(listing);
             }
             
-            // Persist the data
-            cachedListings[location][searchCategory] = allListings;
-            saveLocationListings();
             return allListings;
         };
         
@@ -559,15 +552,15 @@ angular.module('starter.services', [])
                     tokenSecret, {encodeSignature:false}
                 );
                 params['oauth_signature'] = signature;
-                return $http.jsonp(url, {params: params});
+                return $http.jsonp(url, {params: params}).then(function(results) {
+                    $log.log("Got information listing for " + location + ":"+ category);
+                    return parseYelpData(location, category, results.data);
+                }, function(data) {
+                    $log.log("Data requested failed for " + location + ":" + category);
+                    return null;
+                });
         };
-        
-        var queryYelpForLocation = function(location) {
-            return searchCategories.map(function(category) {
-               return { category: getDataForLocationAndCategory(location, category) }; 
-            });
-        }
-        
+                
         return {
 
             clearCache: function() {
@@ -580,16 +573,18 @@ angular.module('starter.services', [])
              * If the information was not able to be generated, method will
              * return null
              */
-            getListing: function(location) {
+            getListingForCategory: function(location, cateory) {
                 
                 // Do this shit if we don't have cached listings
                 // We will do four call, one for each of the search categories
-                var yelpCalls = queryYelpForLocation(location);
-                var _location = location;
-                cachedListings[_location] = {};
-                return $q.all(yelpCalls).then(function(results) {
-                    return cachedListings[_location];
-                });
+                return getDataForLocationAndCategory(location, cateory);
+            },
+            
+            dealWithResponse: function(results) {
+                
+                // Do this shit if we don't have cached listings
+                // We will do four call, one for each of the search categories
+                return parseYelpData(null, null, results);
             }
         };
     }])

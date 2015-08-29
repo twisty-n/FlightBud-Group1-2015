@@ -24,8 +24,9 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
             }
         });
     })
+    
+    .config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
 
-    .config(function ($stateProvider, $urlRouterProvider) {
 
         // Ionic uses AngularUI Router which uses the concept of states
         // Learn more here: https://github.com/angular-ui/ui-router
@@ -64,10 +65,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                                 FlightsService.nextFlightToLeave().id
                         );
                     },
-                    locationListing: function(LocationInformationService, $stateParams, FlightsService) {
+                    accomodationListing: function(LocationInformationService, $stateParams, FlightsService) {
                         var flightId = $stateParams.flightId;
-                        var destination = ((flightId != -1) ? FlightsService.get(flightId) : FlightsService.nextFlightToLeave()).destination;
-                        return LocationInformationService.getListing(destination);
+                        var destination  =  ((flightId != -1) ? 
+                                FlightsService.get(flightId).destination : 
+                                FlightsService.nextFlightToLeave().destination);
+                        return LocationInformationService.getListingForCategory(destination, "accomodation");
                     }
                 }
             })
@@ -101,3 +104,4 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
             )
         ); // End otherwise
     });
+   
