@@ -22,6 +22,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                 // org.apache.cordova.statusbar required
                 window.StatusBar.styleLightContent();
             }
+            window.localStorage['userEmail'] = 'email';
+            window.localStorage['userPassword'] = 'password';
         });
     })
     

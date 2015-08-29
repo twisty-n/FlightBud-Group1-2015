@@ -292,24 +292,29 @@ angular.module('starter.controllers', [])
     {
             
         // Stop back bar appearing
-        $ionicNavBarDelegate.showBar(false);        
+        $ionicNavBarDelegate.showBar(false);  
+        $scope.email = '';
+        $scope.password = '';      
 
         /**
          * Performs the user login and the initial application config
          */
-        $scope.doLogin = function (userCredentials) {
+        $scope.doLogin = function () {
         
             // Perform an API request
             // We'll need to have  a stub here
             // If successful, save the credenials, and return
+            var userCredentials = {};
+            userCredentials.email = $scope.email;
+            userCredentials.password = $scope.password
             $log.log(userCredentials.email);
             $log.log(userCredentials.password);
             {
                 // This will be in the callback
             
                 // Save the user details to local storage
-                $localstorage.set('userEmail',      userCredentials.email);
-                $localstorage.set('userPassword',   userCredentials.password);
+                $localstorage.set('userEmail',      $scope.email);
+                $localstorage.set('userPassword',   $scope.password);
                 
                 // Make it so we can't go back to login
                 $ionicViewService.nextViewOptions({
@@ -325,7 +330,7 @@ angular.module('starter.controllers', [])
                     $localstorage.setObject("cachedWeather", {});
                     $localstorage.setObject("cachedListings", {});
                     $localstorage.setObject("checklists", {});
-                    $state.go('dashboard');
+                    $state.go('all-flights');
                     
                 } else {
                     // Just trust me

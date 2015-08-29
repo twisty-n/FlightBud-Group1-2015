@@ -10,16 +10,18 @@
                 <img src="img/fp_main.png">
             </div>
         </div>
+        <form ng-controller="AuthCtrl">
+            <div class="list list-inset">
+                <label class="item item-input">
+                    <input type="email" placeholder="Email" ng-model="email">
+                </label>
+                <label class="item item-input">
+                    <input type="password" placeholder="Password" ng-model="password">
+                </label>
+            </div>
+            <button class="button button-block button-calm" ng-click="doLogin()">Get Started</button>
+        </form>
 
-        <div class="list list-inset">
-            <label class="item item-input">
-                <input type="email" placeholder="Email" ng-model="data.email">
-            </label>
-            <label class="item item-input">
-                <input type="password" placeholder="Password" ng-model="data.password">
-            </label>
-        </div>
-        <button class="button button-block button-calm" ng-click="doLogin(data)">Get Started</button>
         <br/>
         
         <p> Have some text here or something. Your companion for the air. </p>
