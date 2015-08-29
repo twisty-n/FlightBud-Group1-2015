@@ -66,6 +66,25 @@ angular.module('starter.controllers', [])
             $scope.currentListingView.list = locationListing[requestedView];
         };
         
+        $scope.cycleCurrentView = function(currentView, swipedLeft) {
+            if (currentView == 'entertainment') {
+               swipedLeft ? 0 : $scope.changeListingView('transportation');
+               return;
+            }
+            if (currentView == 'transportation') {
+                swipedLeft ? $scope.changeListingView('entertainment') 
+                : $scope.changeListingView('entertainment');
+                return;
+            }
+            if (currentView == 'dining') {
+                swipedLeft ? $scope.changeListingView('transportation') :
+                $scope.changeListingView('accomodation');
+                return;
+            }
+            swipedLeft ? $scope.changeListingView('dining') : 0;
+ 
+        }
+        
         // Checlist vars
         $scope.checklist = checklist; // The full checklist
         $scope.viewLists = {
@@ -78,14 +97,30 @@ angular.module('starter.controllers', [])
         
         $scope.toggleListCategoryView = function(categoryKey) {
             $scope[categoryKey+"View"] = !$scope[categoryKey+"View"];
+            var id = '#' + categoryKey;
+            var elem = angular.element(document.querySelector(id))
+            if (elem.hasClass('ion-arrow-right-c')) {
+                elem.removeClass('ion-arrow-right-c');
+                elem.addClass('ion-arrow-down-c');
+            } else {
+                elem.addClass('ion-arrow-right-c');
+                elem.removeClass('ion-arrow-down-c');
+            }
         },
-        
         $scope.completeItem = function(itemName, category) {
             checklist.markAsComplete(itemName, category);
+            $scope.refreshList();
         },
         
+        $scope.refreshList = function() {
+            if ($scope.currentCheckListView == 'all') {$scope.showAllTasks(); return;}
+            if ($scope.currentCheckListView == 'pending') {$scope.showPendingTasks(); return;}
+            if ($scope.currentCheckListView == 'completed') {$scope.showCompletedTasks(); return;}
+        };
         
+        $scope.currentCheckListView = 'all';
         $scope.showPendingTasks = function() {
+            $scope.currentCheckListView = 'pending';
             $scope.viewLists = {
                 health: checklist.categories.health.categoryItems.filter( function(item) { return item.completed == false; } ),
                 finance: checklist.categories.finance.categoryItems.filter( function(item) { return item.completed == false; } ),
@@ -94,8 +129,8 @@ angular.module('starter.controllers', [])
                 my_items: checklist.categories.my_items.categoryItems.filter( function(item) { return item.completed == false; } )
             };
         },
-        
         $scope.showCompletedTasks = function() {
+            $scope.currentCheckListView = 'completed';
             $scope.viewLists = {
                 health: checklist.categories.health.categoryItems.filter( function(item) { return item.completed != false; } ),
                 finance: checklist.categories.finance.categoryItems.filter( function(item) { return item.completed != false; } ),
@@ -104,8 +139,8 @@ angular.module('starter.controllers', [])
                 my_items: checklist.categories.my_items.categoryItems.filter( function(item) { return item.completed != false; } )
             };
         },
-        
         $scope.showAllTasks = function() {
+            $scope.currentCheckListView = 'all';
             $scope.viewLists = {
                 health: checklist.categories.health.categoryItems,
                 finance: checklist.categories.finance.categoryItems,

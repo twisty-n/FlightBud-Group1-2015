@@ -40,7 +40,7 @@
 				above. That way we dont need a seperate view. The icon Would be a styled 
 				version ofthe day part of the date like 27th 28th
 				for each of the forecast days that we have -->
-			<div ng-repeat="forecast in weather.fiveDayForecast">
+			<div  class="item tabs tabs-secondary tabs-icon-left" ng-repeat="forecast in weather.fiveDayForecast">
 				<a class="tab-item" href="#" ng-click='updateWeatherView("{{forecast.utcForecastTime}}")'>
 					<i class="icon ion-sun"/> 
 					{{forecast.displayDay}}th <!-- handle rd st -->
@@ -58,7 +58,7 @@
 			<h2>My {{flight.flightCode}} Checklist</h2>
 			<!-- Update the bolded element to show the current list -->
 			<!-- Additionally apply blue to the text colour -->
-			<p>Complete: {{checklist.completeItems()}}      Pending: {{checklist.remainingItems()}}     <b>Total: {{checklist.totalItems()}}</b></p>
+			<p>Done: {{checklist.completeItems()}}      Left: {{checklist.remainingItems()}}     <b>Total: {{checklist.totalItems()}}</b></p>
 		</div>
 		
 		<!-- The actual checklist -->
@@ -81,15 +81,18 @@
 		<!-- Teh modifiers -->
 		<div class="item tabs tabs-secondary tabs-icon-left"> 
 			<a class="tab-item" href="#" ng-click="showPendingTasks()">
-				<i class="icon ion-android-checkbox-outline-blank"></i>
+				<i class="icon ion-android-checkbox-outline-blank
+					 {{( (currentCheckListView == 'pending')? 'calm' : 'dark')}}"></i>
 				Pending
 			</a>
 			<a class="tab-item" href="#" ng-click="showCompletedTasks()">
-				<i class="icon ion-android-checkbox-outline"></i>
+				<i class="icon ion-android-checkbox-outline 
+					{{( (currentCheckListView == 'completed')? 'calm' : 'dark')}}"></i>
 				Completed
 			</a>
 			<a class="tab-item" href="#" ng-click="showAllTasks()">
-				<i class="icon ion-ios-list"></i>
+				<i class="icon ion-ios-list 
+					{{( (currentCheckListView == 'all')? 'calm' : 'dark')}}"></i>
 				All tasks
 			</a>
 		</div>
@@ -99,6 +102,27 @@
 	
 	<!-- LocationListing Card  -->  
 	<div class="list card" >
+		
+		<div class="item item-avatar">
+			<!-- Demo using data loaded by our controller -->
+			<img class="" src="img/location-icon.png">
+			<h2>{{flight.destination}} Essential Locations</h2>
+			<!-- Update the bolded element to show the current list -->
+			<!-- Additionally apply blue to the text colour -->
+			<p>Currently Viewing: {{currentListingView.name}}</p>
+		</div>
+		<div class="item item-body">
+			<div class="list" 
+				on-swipe-left="cycleCurrentView('{{currentListingView.name}}', true)"
+				on-swipe-right='cycleCurrentView({{currentListingView.name}}, false)'>
+				<a class="item"
+					ng-repeat="pointOfInterest in currentListingView.list" 
+					style="background-colour: stable"
+					ng-click="viewDetail(listingId)">
+					{{pointOfInterest.name}}
+				</a>
+			</div>
+		</div>
 		<div class="item tabs tabs-secondary tabs-icon-left"> 
 			<a class='tab-item ' 
 				href="#" 
@@ -120,18 +144,6 @@
 				ng-click="changeListingView('entertainment')">
 				<i class="icon ion-cash"></i>
 			</a>
-		</div>
-		<!-- TODO: Change to use a placeholder variable
-			That will allow us to update the information in place  -->
-		<div class="item item-body">
-			<div class="list">
-				<a class="item"
-					ng-repeat="pointOfInterest in currentListingView.list" 
-					style="background-colour: stable"
-					ng-click="viewDetail(listingId)">
-					{{pointOfInterest.name}}
-				</a>
-			</div>
 		</div>
 	</div>
 	
