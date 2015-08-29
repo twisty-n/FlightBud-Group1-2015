@@ -55,6 +55,13 @@ angular.module('starter.controllers', [])
         
         // Set up variables
         $scope.flight = flight;
+        
+        $scope.prettyLength= function(length) {
+            var minutes = (length % 60);
+            var hours = parseInt((length / 60).toString());;
+            return hours + 'h ' + minutes + 'm'; 
+        }
+        
         $scope.weather = weather;
         $scope.currentWeatherView = weather.currentWeather;
         $scope.locationListing = locationListing;
@@ -163,6 +170,28 @@ angular.module('starter.controllers', [])
                 my_items: checklist.categories.my_items.categoryItems
             };
         },
+        
+        $scope.doTempConversion = function(temp) {
+            if ($localstorage.getObject('userSettings').metric == true) {
+                return Math.round(temp - 273.15) + '°C';
+            } else {
+            	return Math.round(((temp - 273.15) * 1.8) + 32) + '°F';
+            }
+        }
+        
+        $scope.prettyDay = function(day) {
+            switch (day) {
+                case 1 : ;
+                case 21 : ;
+                case 31: return 'st'
+                case 2 : ;
+                case 22: return 'nd';
+                case 3 :;
+                case 23 : return 'rd';
+                
+                default: return 'th';
+            }
+        }
 
         $scope.doRefresh = function () {
             // Do a network request to update if needed

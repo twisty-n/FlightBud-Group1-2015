@@ -7,43 +7,81 @@
     	on-refresh="doRefresh()">
   	</ion-refresher>
 	  
-	  <h1>Flight ID: {{flight.id}}</h1>
-	  <h1>Flight Code: {{flight.flightCode}}</h1>
+	  <!-- Weather Card  -->  
+	<div class="list card" >
+		<div class="item item-avatar">
+			<!-- Demo using data loaded by our controller -->
+			<img class="" src="img/plane.png">
+			<h2><b>Flight: {{flight.flightCode}}</b></h2>
+			<h2>Departing: {{flight.departureTime}}</h2>
+		</div>
+
+		<div class="item item-body">
+			<div class="list"> 
+				<div class="item item-icon-left">
+					<i class="icon ion-clock positive"></i>
+					Touchdown: {{flight.arrivalTime}}
+				</div>
+				<div class="item item-icon-left">
+					<i class="icon ion-map positive"></i>
+					Trip Length: {{prettyLength(flight.flight_time)}}
+				</div>
+				<div class="item item-icon-left">
+					<i class="icon ion-plane positive"></i>
+					Carrier: {{flight.airline}}
+				</div>
+				<div class="item item-icon-left">
+					<i class="icon ion-ios-navigate-outline assertive"></i>
+					Departs: {{flight.origin}}
+				</div>
+				<div class="item item-icon-left">
+					<i class="icon ion-ios-navigate assertive"></i>
+					Arrives: {{flight.destination}}
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- End weather card -->
 	  
 	<!-- Weather Card  -->  
 	<div class="list card" >
 		<div class="item item-avatar">
 			<!-- Demo using data loaded by our controller -->
 			<img class="" src="img/weather/weather-large.png">
-			<h2>{{flight.destination}} Weather Conditions. </h2>
-			<p>for?Time : {{currentWeatherView.utcForecastTime}}</p>
+			<h2><b>{{flight.destination}} Forecast</b></h2>
+			<p>{{currentWeatherView.utcForecastTime}}</p>
 		</div>
 		<!-- TODO: Change to use a placeholder variable
 			That will allow us to update the information in place  -->
+			<div class="item item-avatar"> 
+				<img class="" src="{{currentWeatherView.icon}}">
+				<h2>Outlook: {{currentWeatherView.mainText}}</h2>
+				<p>Avg Temp: {{doTempConversion(currentWeatherView.tempurature)}}</p>
+			</div>
 		<div class="item item-body">
-			<img class="" src="{{currentWeatherView.icon}}">
-			<h2>!Float to left of Icon! {{currentWeatherView.mainText}}</h2>
-			<p>
-				description: 		String:		Short sentance description
-				minTempurature: 	int:		Kelvin min temp
-				maxTempurature: 	int:		Kelvin max temp
-				tempurature: 		int:		Kelvin avg temp
-				Ill leave these for you Al!
-			</p>
+			<div class="list"> 
+				<div class="item item-icon-left">
+					<i class="icon ion-document-text royal"></i>
+					Conditions: {{currentWeatherView.description}}
+				</div>
+				<div class="item item-icon-left">
+					<i class="icon ion-paper-airplane positive"></i>
+					Wind Speed: {{currentWeatherView.windSpeed}} m/s
+				</div>
+				<div class="item item-icon-left">
+					<i class="icon ion-thermometer assertive"></i>
+					Humidity: {{currentWeatherView.humidity}}%
+				</div>
+			</div>
 		</div>
-		
-		I'll leave you to pretty this up. But all the logic is there for 
-		inline updating :)'
-		
 		<div class="item tabs tabs-secondary tabs-icon-left"> 
 			<!-- These can be little clickable Icons which change the content in the panel
 				above. That way we dont need a seperate view. The icon Would be a styled 
 				version ofthe day part of the date like 27th 28th
 				for each of the forecast days that we have -->
-			<div  class="item tabs tabs-secondary tabs-icon-left" ng-repeat="forecast in weather.fiveDayForecast">
+			<div  class="item tabs tabs-secondary" ng-repeat="forecast in weather.fiveDayForecast">
 				<a class="tab-item" href="#" ng-click='updateWeatherView("{{forecast.utcForecastTime}}")'>
-					<i class="icon ion-sun"/> 
-					{{forecast.displayDay}}th <!-- handle rd st -->
+					<h2>{{forecast.displayDay}}{{prettyDay(forecast.displayDay)}}</h2> <!-- handle rd st -->
 				</a>
 			</div>
 		</div>
@@ -55,7 +93,7 @@
 		<div class="item item-avatar">
 			<!-- Demo using data loaded by our controller -->
 			<img class="" src="img/blue_tick.jpg">
-			<h2>My {{flight.flightCode}} Checklist</h2>
+			<h2><b>My {{flight.flightCode}} Checklist</b></h2>
 			<!-- Update the bolded element to show the current list -->
 			<!-- Additionally apply blue to the text colour -->
 			<p>Done: {{checklist.completeItems()}}      Left: {{checklist.remainingItems()}}     <b>Total: {{checklist.totalItems()}}</b></p>
@@ -84,17 +122,17 @@
 		<div class="item tabs tabs-secondary tabs-icon-left"> 
 			<a class="tab-item" href="#" ng-click="showPendingTasks()">
 				<i class="icon ion-android-checkbox-outline-blank
-					 {{( (currentCheckListView == 'pending')? 'calm' : 'dark')}}"></i>
+					 {{( (currentCheckListView == 'pending')? 'positive' : 'dark')}}"></i>
 				Pending
 			</a>
 			<a class="tab-item" href="#" ng-click="showCompletedTasks()">
 				<i class="icon ion-android-checkbox-outline 
-					{{( (currentCheckListView == 'completed')? 'calm' : 'dark')}}"></i>
+					{{( (currentCheckListView == 'completed')? 'positive' : 'dark')}}"></i>
 				Completed
 			</a>
 			<a class="tab-item" href="#" ng-click="showAllTasks()">
 				<i class="icon ion-ios-list 
-					{{( (currentCheckListView == 'all')? 'calm' : 'dark')}}"></i>
+					{{( (currentCheckListView == 'all')? 'positive' : 'dark')}}"></i>
 				All tasks
 			</a>
 		</div>
@@ -123,7 +161,6 @@
 					ng-click="viewDetail(listingId)">
 					<img class="" src="img/rating/{{pointOfInterest.rating}}.png">
 					{{pointOfInterest.name}}
-					{{pointOfInterest.rating}}
 				</a>
 			</div>
 		</div>
@@ -131,19 +168,19 @@
 			<a class='tab-item ' 
 				href="#" 
 				ng-click="changeListingView('accomodation')">
-				<i class="icon ion-home {{( (currentListingView.name == 'accomodation')? 'calm' : 'dark')}}"></i>
+				<i class="icon ion-home {{( (currentListingView.name == 'accomodation')? 'positive' : 'dark')}}"></i>
 			</a>
-			<a class="tab-item {{( (currentListingView.name == 'dining')? 'calm' : 'dark' )}}" 
+			<a class="tab-item {{( (currentListingView.name == 'dining')? 'positive' : 'dark' )}}" 
 				href="#" 
 				ng-click="changeListingView('dining')">
 				<i class="icon ion-beer"></i>
 			</a>
-			<a class="tab-item {{( (currentListingView.name == 'transportation')? 'calm' : 'dark' )}}" 
+			<a class="tab-item {{( (currentListingView.name == 'transportation')? 'positive' : 'dark' )}}" 
 				href="#" 
 				ng-click="changeListingView('transportation')">
 				<i class="icon ion-model-s"></i>
 			</a>
-			<a class="tab-item {{( (currentListingView.name == 'entertainment')? 'calm' : 'dark' )}}" 
+			<a class="tab-item {{( (currentListingView.name == 'entertainment')? 'positive' : 'dark' )}}" 
 				href="#" 
 				ng-click="changeListingView('entertainment')">
 				<i class="icon ion-cash"></i>

@@ -213,12 +213,13 @@ angular.module('starter.services', [])
             {
                 id: 1,
                 price: 123.45,
-                flight_time: 180, // I can't remember how we stored these, you can deal :P
+                flight_time: 285, // I can't remember how we stored these, you can deal :P
                 origin: 'Bangkok',
                 destination: 'Sydney',
                 departureTime: 12.45,       // Mocked for now. Deal with same as Ember
                 arrivalTime: 8.46,
-                flightCode: "JQ456"
+                flightCode: "JQ456",
+                airline: 'MH370'
             },
             
             {
@@ -229,7 +230,9 @@ angular.module('starter.services', [])
                 destination: 'Singapore',
                 departureTime: 12.45,       // Mocked for now. Deal with same as Ember
                 arrivalTime: 8.46,
-                flightCode: "BUTTS6"
+                flightCode: "BUTTS6",
+                airline: 'MH370'
+                
             },
             
             {
@@ -240,7 +243,9 @@ angular.module('starter.services', [])
                 destination: 'Singapore',
                 departureTime: 12.45,       // Mocked for now. Deal with same as Ember
                 arrivalTime: 8.46,
-                flightCode: "I am amazing"
+                flightCode: "I am amazing",
+                airline: 'MH370'
+                
             },
             
             {
@@ -251,7 +256,9 @@ angular.module('starter.services', [])
                 destination: 'Singapore',
                 departureTime: 12.45,       // Mocked for now. Deal with same as Ember
                 arrivalTime: 8.46,
-                flightCode: "I am a stegosaurus"
+                flightCode: "I am a stegosaurus",
+                airline: 'MH370'
+                
             }
         ]
         
@@ -374,8 +381,8 @@ angular.module('starter.services', [])
                             utcForecastTime: weatherDatum.dt_txt,
                             mainText: weatherDatum.weather[0].main,
                             description: weatherDatum.weather[0].description,
-                            minTempurature: weatherDatum.main.temp_min,
-                            maxTempurature: weatherDatum.main.temp_max,
+                            windSpeed: weatherDatum.wind.speed,
+                            humidity: weatherDatum.main.humidity,
                             tempurature: weatherDatum.main.temp,
                             icon: lookup(weatherDatum.weather[0].icon),
                             displayDay: date.getDate()
