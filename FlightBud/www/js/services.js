@@ -492,6 +492,12 @@ angular.module('starter.services', [])
         // Prepare yourself for all of the fucking hax
         // Configure all of the values that we'll need to work with
         // In order to access the API
+        
+        var cachedListings = $localstorage.getObject("cachedListings", {});
+        var saveAllListings = function() {
+            $localstorage.setObject('cachedListings', cachedListings);
+        }
+        var callbackCount = angular.callbacks.counter;
         var method = 'GET';
         var url = 'http://api.yelp.com/v2/search';
         var randomString = function(length, chars) {
@@ -502,9 +508,8 @@ angular.module('starter.services', [])
                 return result;
         };
         var getParams = function(_location, _term) {
-            var callbackId = angular.callbacks.counter;
             return {
-                callback: 'angular.callbacks._' + callbackId,
+                callback: 'angular.callbacks._' + callbackCount,
                 location: _location,                         // Need to set before use
                 limit: '10',
                 term: _term,                             // Need to set before use
@@ -519,6 +524,7 @@ angular.module('starter.services', [])
         var tokenSecret = 'xyBFeTMNREO8HkqJ9XotYlvkqzs';     // Bad dev!
         
         var parseYelpData = function(location, searchCategory, jsonObject) {
+            if (cachedListings[location] == undefined) { cachedListings[location] = {}; }
             var businesses = jsonObject.businesses;
             var allListings = [];
             var busLength = businesses.length;
@@ -536,7 +542,8 @@ angular.module('starter.services', [])
                 }
                 allListings.push(listing);
             }
-            
+            cachedListings[location][searchCategory] = allListings;
+            saveAllListings();
             return allListings;
         };
         
@@ -552,14 +559,38 @@ angular.module('starter.services', [])
                     tokenSecret, {encodeSignature:false}
                 );
                 params['oauth_signature'] = signature;
-                return $http.jsonp(url, {params: params}).then(function(results) {
+                
+                var callback = function(results) {
                     $log.log("Got information listing for " + location + ":"+ category);
+                    delete this[params.callback];
                     return parseYelpData(location, category, results.data);
-                }, function(data) {
+                }
+                this[params.callback] = function (data) {
+                    callback(data);
+                };
+                return $http.jsonp(url, {params: params}).then(function(results) {callback(results)}, function(data) {
                     $log.log("Data requested failed for " + location + ":" + category);
                     return null;
                 });
         };
+        
+        // We are going to have to register our own magic functions to handle the callbacks
+        /*var c = $window.angular.callbacks.counter.toString(36);
+
+        $window['angularcallbacks_' + c] = function (data) {
+            $window.angular.callbacks['_' + c](data);
+            delete $window['angularcallbacks_' + c];
+        };*/
+        
+        var searchTerms = [ "accomodation", "transportation", "dining", "entertainment" ]
+        var fireQueries = function(location) {
+            var array = searchTerms.map(function(term) {
+                var promise = getDataForLocationAndCategory(location, term);
+                callbackCount++; 
+                return promise;
+            });
+            return array; 
+        }
                 
         return {
 
@@ -574,10 +605,18 @@ angular.module('starter.services', [])
              * return null
              */
             getListingForCategory: function(location, cateory) {
-                
+                /*
+                if (cachedListings[location] != undefined) {
+                    return cachedListings[location];
+                }
+                */
                 // Do this shit if we don't have cached listings
                 // We will do four call, one for each of the search categories
-                return getDataForLocationAndCategory(location, cateory);
+                $q.all(fireQueries(location)).then(function(results) {
+                    angular.callbacks.counter = 0;
+                    callbackCount = angular.callbacks.counter;
+                    return cachedListings[location];
+                });
             },
             
             dealWithResponse: function(results) {

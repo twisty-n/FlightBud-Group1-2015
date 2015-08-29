@@ -50,11 +50,11 @@ angular.module('starter.controllers', [])
         
         $scope.$on('$ionicView.leave', function (e) {
             ChecklistService.saveChecklist($scope.flight.id, $scope.checklist);
-            $scope.flight = null;
-            $scope.weather = null;
+            flight = null;
+            weather = null;
             $scope.currentWeatherView = null;
-            $scope.viewLists = null;
-            $scope.checklist = null;
+            viewLists = null;
+            checklist = null;
         });
         
         // Set up variables
