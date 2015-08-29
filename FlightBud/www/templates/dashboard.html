@@ -97,34 +97,42 @@
 	</div>
 	<!-- End checklist card  -->
 	
-	<div class="card">
-  		<div class="item item-text-wrap">
-    		This is a basic Card which contains an item that has wrapping text.
-  		</div>
-	</div>
-	
-	<div class="card">
-  		<div class="item item-text-wrap">
-    		This is a basic Card which contains an item that has wrapping text.
-  		</div>
-	</div>
-	
-	<div class="card">
-  		<div class="item item-text-wrap">
-    		This is a basic Card which contains an item that has wrapping text.
-  		</div>
-	</div>
-	
-	<div class="card">
-  		<div class="item item-text-wrap">
-    		This is a basic Card which contains an item that has wrapping text.
-  		</div>
-	</div>
-	
-	<div class="card">
-  		<div class="item item-text-wrap">
-    		This is a basic Card which contains an item that has wrapping text.
-  		</div>
+	<!-- LocationListing Card  -->  
+	<div class="list card" >
+		<div class="item tabs tabs-secondary tabs-icon-left"> 
+			<a class='tab-item ' 
+				href="#" 
+				ng-click="changeListingView('accomodation')">
+				<i class="icon ion-home {{( (currentListingView.name == 'accomodation')? 'calm' : 'dark')}}"></i>
+			</a>
+			<a class="tab-item {{( (currentListingView.name == 'dining')? 'calm' : 'dark' )}}" 
+				href="#" 
+				ng-click="changeListingView('dining')">
+				<i class="icon ion-beer"></i>
+			</a>
+			<a class="tab-item {{( (currentListingView.name == 'transportation')? 'calm' : 'dark' )}}" 
+				href="#" 
+				ng-click="changeListingView('transportation')">
+				<i class="icon ion-model-s"></i>
+			</a>
+			<a class="tab-item {{( (currentListingView.name == 'entertainment')? 'calm' : 'dark' )}}" 
+				href="#" 
+				ng-click="changeListingView('entertainment')">
+				<i class="icon ion-cash"></i>
+			</a>
+		</div>
+		<!-- TODO: Change to use a placeholder variable
+			That will allow us to update the information in place  -->
+		<div class="item item-body">
+			<div class="list">
+				<a class="item"
+					ng-repeat="pointOfInterest in currentListingView.list" 
+					style="background-colour: stable"
+					ng-click="viewDetail(listingId)">
+					{{pointOfInterest.name}}
+				</a>
+			</div>
+		</div>
 	</div>
 	
   </ion-content>

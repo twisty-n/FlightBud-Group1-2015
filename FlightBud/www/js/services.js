@@ -604,7 +604,7 @@ angular.module('starter.services', [])
              * If the information was not able to be generated, method will
              * return null
              */
-            getListingForCategory: function(location, cateory) {
+            getListingForCategory: function(location) {
                 
                 if (cachedListings[location] != undefined) {
                     return cachedListings[location];

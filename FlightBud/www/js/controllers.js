@@ -30,10 +30,7 @@ angular.module('starter.controllers', [])
     .controller('DashboardCtrl', function (
         $scope, $localstorage, 
         $state, weather, flight, $log, checklist, ChecklistService, 
-        accomodationListing
-        //transportListing,
-        //entertainmentListing,
-        //diningListing) 
+        locationListing
     ){
     
         // If the user is not authenicated, redirect
@@ -44,7 +41,6 @@ angular.module('starter.controllers', [])
             if ($localstorage.get('userEmail', "null") == "null") {
                 $state.go('login');
             } 
-    
             // TODO: whenever we renter the view, refresh the content
         });
         
@@ -61,7 +57,14 @@ angular.module('starter.controllers', [])
         $scope.flight = flight;
         $scope.weather = weather;
         $scope.currentWeatherView = weather.currentWeather;
-        //$scope.locationListing = locationListing;
+        $scope.locationListing = locationListing;
+        $scope.currentListingView = { 
+            name:"accomodation", list: locationListing.accomodation };        
+        
+        $scope.changeListingView = function(requestedView) {
+            $scope.currentListingView.name = requestedView;
+            $scope.currentListingView.list = locationListing[requestedView];
+        };
         
         // Checlist vars
         $scope.checklist = checklist; // The full checklist

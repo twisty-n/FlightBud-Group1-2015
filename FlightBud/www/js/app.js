@@ -65,12 +65,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                                 FlightsService.nextFlightToLeave().id
                         );
                     },
-                    accomodationListing: function(LocationInformationService, $stateParams, FlightsService) {
+                    locationListing: function(LocationInformationService, $stateParams, FlightsService) {
                         var flightId = $stateParams.flightId;
                         var destination  =  ((flightId != -1) ? 
                                 FlightsService.get(flightId).destination : 
                                 FlightsService.nextFlightToLeave().destination);
-                        return LocationInformationService.getListingForCategory(destination, "accomodation");
+                        return LocationInformationService.getListingForCategory(destination);
                     }
                 }
             })
