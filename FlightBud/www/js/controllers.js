@@ -66,14 +66,15 @@ angular.module('starter.controllers', [])
             $scope.currentListingView.list = locationListing[requestedView];
         };
         
-        $scope.cycleCurrentView = function(currentView, swipedLeft) {
+        $scope.cycleCurrentView = function(swipedLeft) {
+            var currentView = $scope.currentListingView.name;
             if (currentView == 'entertainment') {
                swipedLeft ? 0 : $scope.changeListingView('transportation');
                return;
             }
             if (currentView == 'transportation') {
                 swipedLeft ? $scope.changeListingView('entertainment') 
-                : $scope.changeListingView('entertainment');
+                : $scope.changeListingView('dining');
                 return;
             }
             if (currentView == 'dining') {

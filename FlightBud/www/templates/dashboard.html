@@ -113,8 +113,8 @@
 		</div>
 		<div class="item item-body">
 			<div class="list" 
-				on-swipe-left="cycleCurrentView('{{currentListingView.name}}', true)"
-				on-swipe-right='cycleCurrentView({{currentListingView.name}}, false)'>
+				on-swipe-left="cycleCurrentView(true)"
+				on-swipe-right='cycleCurrentView(false)'>
 				<a class="item"
 					ng-repeat="pointOfInterest in currentListingView.list" 
 					style="background-colour: stable"
