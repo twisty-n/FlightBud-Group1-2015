@@ -86,6 +86,18 @@ angular.module('starter.controllers', ['ionic'])
             return false;
         }
         
+        $scope.openAirportDirections = function() {
+            $scope.openMap(["Current+Location"], [flight.origin+"+Airport"], true, false);
+        }
+        
+        $scope.openDestinationLocation = function() {
+            $scope.openMap(["Current+Location"], [flight.destination+"+Airport"], false, true);
+        }
+        
+        $scope.openListingMap = function() {
+            $scope.openMap([$scope.flight.destination+"+Airport"], $scope.listingDetail.address, false, false);
+        }
+        
         $scope.openMap = function(originAddress, destinationAddress, withTraffic, singleSearch) {
             var isAndroid = ionic.Platform.isAndroid();
             if (isAndroid && withTraffic) {
@@ -96,6 +108,7 @@ angular.module('starter.controllers', ['ionic'])
                     singleSearch,
                     false), '_system', 'location=yes'
                 );
+                return;
             } else if (isAndroid){
                  $window.open($scope.createMapsUrl(
                     originAddress, 
@@ -104,14 +117,16 @@ angular.module('starter.controllers', ['ionic'])
                     singleSearch,
                     true), '_system', 'location=yes'
                 );
+                return;
             } else {
                 $window.open($scope.createMapsUrl(
                     originAddress, 
                     destinationAddress, 
                     withTraffic, 
                     singleSearch,
-                    true), '_system', 'location=yes'
+                    false), '_system', 'location=yes'
                 );
+                return;
             }
         }
         
@@ -137,7 +152,6 @@ angular.module('starter.controllers', ['ionic'])
                     +conDestinationAddress;
                 }
             }
-
         }
         
         // Set up variables

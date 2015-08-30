@@ -31,14 +31,12 @@
 					With: {{flight.airline}}
 					<i class="icon ion-arrow-right-c icon-accessory"></i>
 				</a>
-				<a class="item item-icon-left item-icon-right" 
-	ng-click='{{openMap(["Current+Location"], [flight.origin+"+Airport"], true, false)}}'>			
+				<a class="item item-icon-left item-icon-right" ng-click="openAirportDirections()">			
 					<i class="icon ion-ios-navigate-outline assertive"></i>
 					Departs: {{flight.origin}}
 					<i class="icon ion-arrow-right-c icon-accessory"></i>
 				</a>
-				<a class="item item-icon-left item-icon-right"
-					href='{{openMap(["Current+Location"], [flight.destination+"+Airport"], false, true)}}'>
+				<a class="item item-icon-left item-icon-right" ng-click="openDestinationLocation()">
 					<i class="icon ion-ios-navigate assertive"></i>
 					Arrives: {{flight.destination}}
 					<i class="icon ion-arrow-right-c icon-accessory"></i>
@@ -224,7 +222,7 @@
 						Go to Website
 						<i class="icon ion-arrow-right-c icon-accessory"></i>
 					</a>
-					<a class="item item-icon-left item-icon-right">
+					<a class="item item-icon-left item-icon-right" ng-click="openListingMap()">
 						<i class="icon ion-android-map assertive"></i>
 						Location
 						<i class="icon ion-arrow-right-c icon-accessory"></i>
