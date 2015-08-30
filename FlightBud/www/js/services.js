@@ -215,23 +215,23 @@ angular.module('starter.services', [])
                 price: 123.45,
                 flight_time: 285, // I can't remember how we stored these, you can deal :P
                 origin: 'Bangkok',
-                destination: 'Sydney',
+                destination: 'Washington DC',
                 departureTime: 12.45,       // Mocked for now. Deal with same as Ember
                 arrivalTime: 8.46,
-                flightCode: "JQ456",
-                airline: 'MH370'
+                flightCode: "QF456",
+                airline: 'Quantas'
             },
             
             {
                 id: 2,
                 price: 123.45,
                 flight_time: 180, // I can't remember how we stored these, you can deal :P
-                origin: 'Bangkok',
-                destination: 'Singapore',
+                origin: 'Quatar',
+                destination: 'Dubai',
                 departureTime: 12.45,       // Mocked for now. Deal with same as Ember
                 arrivalTime: 8.46,
-                flightCode: "BUTTS6",
-                airline: 'MH370'
+                flightCode: "MH360",
+                airline: 'Malaysia Airlines'
                 
             },
             
@@ -239,12 +239,12 @@ angular.module('starter.services', [])
                 id: 3,
                 price: 123.45,
                 flight_time: 180, // I can't remember how we stored these, you can deal :P
-                origin: 'Bangkok',
-                destination: 'Singapore',
+                origin: 'Sydney',
+                destination: 'New York',
                 departureTime: 12.45,       // Mocked for now. Deal with same as Ember
                 arrivalTime: 8.46,
-                flightCode: "I am amazing",
-                airline: 'MH370'
+                flightCode: "JQ69",
+                airline: 'JetStar'
                 
             },
             
@@ -252,12 +252,12 @@ angular.module('starter.services', [])
                 id: 4,
                 price: 123.45,
                 flight_time: 180, // I can't remember how we stored these, you can deal :P
-                origin: 'Bangkok',
+                origin: 'Sydney',
                 destination: 'Singapore',
                 departureTime: 12.45,       // Mocked for now. Deal with same as Ember
                 arrivalTime: 8.46,
-                flightCode: "I am a stegosaurus",
-                airline: 'MH370'
+                flightCode: "STI360",
+                airline: 'STIFlight'
                 
             }
         ]

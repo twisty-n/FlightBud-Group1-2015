@@ -26,7 +26,7 @@
 					<i class="icon ion-map positive"></i>
 					Trip Length: {{prettyLength(flight.flight_time)}}
 				</div>
-				<a class="item item-icon-left item-icon-right">
+				<a class="item item-icon-left item-icon-right" ng-click="openWikiUrl({{flight.airline}})">
 					<i class="icon ion-plane positive"></i>
 					With: {{flight.airline}}
 					<i class="icon ion-arrow-right-c icon-accessory"></i>
