@@ -1,4 +1,4 @@
-angular.module('starter.controllers', [])
+angular.module('starter.controllers', ['ionic'])
 
     .controller('FlightManagementCtrl', function($scope, $localstorage, $state, FlightsService) {
         
@@ -30,7 +30,7 @@ angular.module('starter.controllers', [])
     .controller('DashboardCtrl', function (
         $scope, $localstorage, 
         $state, weather, flight, $log, checklist, ChecklistService, 
-        locationListing, $ionicModal, $window, ionic
+        locationListing, $ionicModal, $window
     ){
     
         // If the user is not authenicated, redirect
@@ -86,20 +86,29 @@ angular.module('starter.controllers', [])
             return false;
         }
         
-        $scope.createMapsUrl = function(searchDevice, usingCoords) {
-            if (usingCoords) {
-                if (ionic.Platform.isAndroid()) {
-                    // create android map string
-                } else {
-                    // Create IOS map string
-                }
+        $scope.createMapsDirectionsUrl = function(originAddress, destinationAddress, withTraffic, singleSearch) {
+            var conOriginAddress = originAddress.reduce(function(accum, val) {
+                return accum + val + '+';
+            });
+            var conDestinationAddress = destinationAddress.reduce(function(accum, val) {
+                return accum + val + '+';
+            });
+            if (ionic.Platform.isAndroid()) {
+                // create android map string doesn't have directions by default
+                return "geo:"
+                +conDestinationAddress;
             } else {
-                if (ionic.Platform.isAndroid()) {
-                    // create android map string
+                // Create IOS map string
+                if (!singleSearch) {
+                    return "http://maps.google.com/?saddr="
+                    +conOriginAddress+"&daddr="
+                    +conDestinationAddress +((withTraffic) ?'&layer=t': '');
                 } else {
-                    // Create IOS map string
+                    return "http://maps.google.com/?q="
+                    +conDestinationAddress;
                 }
             }
+
         }
         
         // Set up variables
