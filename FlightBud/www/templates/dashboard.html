@@ -7,7 +7,7 @@
     	on-refresh="doRefresh()">
   	</ion-refresher>
 	  
-	  <!-- Weather Card  -->  
+	  <!-- Flight Card  -->  
 	<div class="list card" >
 		<div class="item item-avatar">
 			<!-- Demo using data loaded by our controller -->
@@ -44,7 +44,7 @@
 			</div>
 		</div>
 	</div>
-	<!-- End weather card -->
+	<!-- End Flight card -->
 	  
 	<!-- Weather Card  -->  
 	<div class="list card" >
@@ -158,12 +158,13 @@
 			<div class="list" 
 				on-swipe-left="cycleCurrentView(true)"
 				on-swipe-right='cycleCurrentView(false)'>
-				<a class="item item-avatar"
+				<a class="item item-avatar item-icon-right"
 					ng-repeat="pointOfInterest in currentListingView.list" 
 					style="background-colour: stable"
-					ng-click="viewDetail(listingId)">
-					<img class="" src="img/rating/{{pointOfInterest.rating}}.png">
+					ng-click="openModal($index)">
+					<img src="img/rating/{{pointOfInterest.rating}}.png">
 					{{pointOfInterest.name}}
+					<i class="icon ion-arrow-right-c icon-accessory"></i>
 				</a>
 			</div>
 		</div>
@@ -190,6 +191,48 @@
 			</a>
 		</div>
 	</div>
+	
+	<script id="modal.html" type="text/ng-template">
+	<ion-modal-view>
+        <ion-header-bar class="bar bar-header bar-positive">
+          <h1 class="title">{{listingDetail.name}}</h1>
+          <div class="button button-clear" ng-click="modal.hide()"><span class="icon ion-close"></span></div>
+        </ion-header-bar>
+        <ion-content has-header="true" padding="true">
+          <div class="list card" >
+			<div class="item item-avatar">
+				<img src="img/rating/{{listingDetail.rating}}.png">
+				<h2><b>{{listingDetail.name}}</b></h2>
+				<h2>{{listingDetail.rating}} stars</h2>
+			</div>
+	
+			<div class="item item-body">
+			<img class="full-image" src={{listingDetail.image}}></image>
+				<div class="list">
+					<div class="item item-icon-left">
+						<i class="icon ion-android-call balanced"></i>
+						Phone: {{listingDetail.phoneNumber}}
+					</div>
+					<div class="item item-icon-left">
+						<i class="icon ion-document-text positive"></i>
+						<p>Digest: {{listingDetail.snippetText}}</p>
+					</div>
+					<a class="item item-icon-left item-icon-right" href="{{listingDetail.url}}">
+						<i class="icon ion-iphone royal"></i>
+						Go to Website
+						<i class="icon ion-arrow-right-c icon-accessory"></i>
+					</a>
+					<a class="item item-icon-left item-icon-right">
+						<i class="icon ion-android-map assertive"></i>
+						Location
+						<i class="icon ion-arrow-right-c icon-accessory"></i>
+					</a>
+				</div>
+			</div>
+		</div>
+        </ion-content>
+	  </ion-modal-view>
+    </script>
 	
   </ion-content>
 </ion-view>

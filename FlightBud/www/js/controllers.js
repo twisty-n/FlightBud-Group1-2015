@@ -30,7 +30,7 @@ angular.module('starter.controllers', [])
     .controller('DashboardCtrl', function (
         $scope, $localstorage, 
         $state, weather, flight, $log, checklist, ChecklistService, 
-        locationListing
+        locationListing, $ionicModal
     ){
     
         // If the user is not authenicated, redirect
@@ -53,6 +53,35 @@ angular.module('starter.controllers', [])
             checklist = null;
         });
         
+        // Actios for our modal
+        $ionicModal.fromTemplateUrl('modal.html', {
+            scope: $scope,
+            animation: 'slide-in-up'
+        }).then(function(modal) {
+            $scope.modal = modal;
+        });
+        $scope.openModal = function(listingId) {
+            $scope.currentListingView.name
+            $scope.modal.show();
+            $scope.listingDetail = $scope.locationListing[$scope.currentListingView.name][listingId];
+            var x= 0 ;
+        };
+        $scope.closeModal = function() {
+            $scope.modal.hide();
+        };
+        //Cleanup the modal when we're done with it!
+        $scope.$on('$destroy', function() {
+            $scope.modal.remove();
+        });
+        // Execute action on hide modal
+        $scope.$on('modal.hidden', function() {
+            // Execute action
+        });
+        // Execute action on remove modal
+        $scope.$on('modal.removed', function() {
+            // Execute action
+        });
+        
         // Set up variables
         $scope.flight = flight;
         
@@ -66,7 +95,8 @@ angular.module('starter.controllers', [])
         $scope.currentWeatherView = weather.currentWeather;
         $scope.locationListing = locationListing;
         $scope.currentListingView = { 
-            name:"accomodation", list: locationListing.accomodation };        
+            name:"accomodation", list: locationListing.accomodation 
+        };      
         
         $scope.changeListingView = function(requestedView) {
             $scope.currentListingView.name = requestedView;
@@ -181,13 +211,13 @@ angular.module('starter.controllers', [])
         
         $scope.prettyDay = function(day) {
             switch (day) {
-                case 1 : ;
-                case 21 : ;
+                case 1:  ;
+                case 21: ;
                 case 31: return 'st'
-                case 2 : ;
+                case 2:  ;
                 case 22: return 'nd';
-                case 3 :;
-                case 23 : return 'rd';
+                case 3:  ;
+                case 23: return 'rd';
                 
                 default: return 'th';
             }

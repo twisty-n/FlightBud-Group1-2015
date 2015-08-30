@@ -539,6 +539,7 @@ angular.module('starter.services', [])
                 var business = businesses[i];
                 var listing = {};
                 listing.name = business.name;
+                listing.image = business.image_url;
                 listing.rating = business.rating;
                 listing.url = business.mobile_url;
                 listing.snippetText = business.snippet_text;
