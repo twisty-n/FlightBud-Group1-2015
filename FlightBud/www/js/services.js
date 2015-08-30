@@ -544,6 +544,7 @@ angular.module('starter.services', [])
                 listing.url = business.mobile_url;
                 listing.snippetText = business.snippet_text;
                 listing.phoneNumber = business.display_phone;
+                listing.address = business.address;
                 listing.coordinates = {
                     latitude: business.location.coordinate.latitude,
                     longitude: business.location.coordinate.longitude

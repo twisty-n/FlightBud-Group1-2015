@@ -30,7 +30,7 @@ angular.module('starter.controllers', [])
     .controller('DashboardCtrl', function (
         $scope, $localstorage, 
         $state, weather, flight, $log, checklist, ChecklistService, 
-        locationListing, $ionicModal
+        locationListing, $ionicModal, $window, ionic
     ){
     
         // If the user is not authenicated, redirect
@@ -64,7 +64,6 @@ angular.module('starter.controllers', [])
             $scope.currentListingView.name
             $scope.modal.show();
             $scope.listingDetail = $scope.locationListing[$scope.currentListingView.name][listingId];
-            var x= 0 ;
         };
         $scope.closeModal = function() {
             $scope.modal.hide();
@@ -81,6 +80,27 @@ angular.module('starter.controllers', [])
         $scope.$on('modal.removed', function() {
             // Execute action
         });
+        
+        $scope.openListingUrl = function() {
+            $window.open($scope.listingDetail.url, '_system', 'location=yes');
+            return false;
+        }
+        
+        $scope.createMapsUrl = function(searchDevice, usingCoords) {
+            if (usingCoords) {
+                if (ionic.Platform.isAndroid()) {
+                    // create android map string
+                } else {
+                    // Create IOS map string
+                }
+            } else {
+                if (ionic.Platform.isAndroid()) {
+                    // create android map string
+                } else {
+                    // Create IOS map string
+                }
+            }
+        }
         
         // Set up variables
         $scope.flight = flight;
