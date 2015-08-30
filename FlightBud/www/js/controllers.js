@@ -86,14 +86,43 @@ angular.module('starter.controllers', ['ionic'])
             return false;
         }
         
-        $scope.createMapsDirectionsUrl = function(originAddress, destinationAddress, withTraffic, singleSearch) {
+        $scope.openMap = function(originAddress, destinationAddress, withTraffic, singleSearch) {
+            var isAndroid = ionic.Platform.isAndroid();
+            if (isAndroid && withTraffic) {
+                $window.open($scope.createMapsUrl(
+                    originAddress, 
+                    destinationAddress, 
+                    withTraffic, 
+                    singleSearch,
+                    false), '_system', 'location=yes'
+                );
+            } else if (isAndroid){
+                 $window.open($scope.createMapsUrl(
+                    originAddress, 
+                    destinationAddress, 
+                    withTraffic, 
+                    singleSearch,
+                    true), '_system', 'location=yes'
+                );
+            } else {
+                $window.open($scope.createMapsUrl(
+                    originAddress, 
+                    destinationAddress, 
+                    withTraffic, 
+                    singleSearch,
+                    true), '_system', 'location=yes'
+                );
+            }
+        }
+        
+        $scope.createMapsUrl = function(originAddress, destinationAddress, withTraffic, singleSearch, useAndroid) {
             var conOriginAddress = originAddress.reduce(function(accum, val) {
                 return accum + val + '+';
             });
             var conDestinationAddress = destinationAddress.reduce(function(accum, val) {
                 return accum + val + '+';
             });
-            if (ionic.Platform.isAndroid()) {
+            if (useAndroid) {
                 // create android map string doesn't have directions by default
                 return "geo:"
                 +conDestinationAddress;

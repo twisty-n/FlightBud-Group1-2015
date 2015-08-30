@@ -32,13 +32,13 @@
 					<i class="icon ion-arrow-right-c icon-accessory"></i>
 				</a>
 				<a class="item item-icon-left item-icon-right" 
-	href='{{createMapsDirectionsUrl(["Current+Location"], [flight.origin+"+Airport"], true, false)}}'>			
+	ng-click='{{openMap(["Current+Location"], [flight.origin+"+Airport"], true, false)}}'>			
 					<i class="icon ion-ios-navigate-outline assertive"></i>
 					Departs: {{flight.origin}}
 					<i class="icon ion-arrow-right-c icon-accessory"></i>
 				</a>
 				<a class="item item-icon-left item-icon-right"
-					href='{{createMapsDirectionsUrl(["Current+Location"], [flight.origin+"+Airport"], false, true)}}'>
+					href='{{openMap(["Current+Location"], [flight.destination+"+Airport"], false, true)}}'>
 					<i class="icon ion-ios-navigate assertive"></i>
 					Arrives: {{flight.destination}}
 					<i class="icon ion-arrow-right-c icon-accessory"></i>
