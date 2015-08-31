@@ -86,9 +86,9 @@ angular.module('starter.controllers', ['ionic'])
             return false;
         }
         
-        $scope.openUrl = function(url) {
+        $scope.openWikiUrl = function(url) {
             url = url.replace(" ", "_");
-            $window.open("http://m.wikipedia.org/wiki/"+url, '_system', 'location=yes');
+            $window.open("http://en.m.wikipedia.org/wiki/"+url, '_system', 'location=yes');
             return false;
         }
         

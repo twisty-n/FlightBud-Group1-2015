@@ -227,7 +227,7 @@ angular.module('starter.services', [])
                 price: 123.45,
                 flight_time: 180, // I can't remember how we stored these, you can deal :P
                 origin: 'Quatar',
-                destination: 'Dubai',
+                destination: 'Perth',
                 departureTime: 12.45,       // Mocked for now. Deal with same as Ember
                 arrivalTime: 8.46,
                 flightCode: "MH360",
@@ -621,7 +621,7 @@ angular.module('starter.services', [])
                 
                 // Do this shit if we don't have cached listings
                 // We will do four call, one for each of the search categories
-                $q.all(fireQueries(location)).then(function(results) {
+                return $q.all(fireQueries(location)).then(function(results) {
                     angular.callbacks.counter = 0;
                     callbackCount = angular.callbacks.counter;
                     return cachedListings[location];

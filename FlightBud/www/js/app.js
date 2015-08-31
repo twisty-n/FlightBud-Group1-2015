@@ -98,7 +98,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         // if none of the above states are matched, use this as the fallback
         $urlRouterProvider.otherwise(
             (
-                (window.localStorage["userSettings"] == undefined) ? '/dash' :
+                (window.localStorage["userSettings"] == undefined) ? '/dashboard' :
                     (
                         (JSON.parse(window.localStorage["userSettings"]).landingPage != true) ?
                         '/flights' : '/dashboard'
