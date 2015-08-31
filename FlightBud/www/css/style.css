@@ -1,1 +1,56 @@
 /* Empty. Add your own CSS if you like */
+
+.item-complex.item-icon-right {
+    padding-right: 0;
+    margin: 5px;
+}
+
+.bar.bar-calm {
+    border-color: #FFFFFF;
+    background-color: #FFFFFF;
+    background-image: linear-gradient(0deg, #0a9ec7, #0a9ec7 50%, transparent 50%);
+    color: #fff;
+}
+
+.bar-calm .button.button-clear {
+    border-color: transparent;
+    background: none;
+    box-shadow: none;
+    color: #38A4DD;
+    font-size: 17px;
+}
+
+.pane, .view {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /*background-color: #4BCDEA;*/
+/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#2557a8+0,2989d8+28,4bcdea+100 */
+background: rgb(37,87,168); /* Old browsers */
+background: -moz-linear-gradient(45deg,  rgba(37,87,168,1) 0%, rgba(41,137,216,1) 28%, rgba(75,205,234,1) 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left bottom, right top, color-stop(0%,rgba(37,87,168,1)), color-stop(28%,rgba(41,137,216,1)), color-stop(100%,rgba(75,205,234,1))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(45deg,  rgba(37,87,168,1) 0%,rgba(41,137,216,1) 28%,rgba(75,205,234,1) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(45deg,  rgba(37,87,168,1) 0%,rgba(41,137,216,1) 28%,rgba(75,205,234,1) 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(45deg,  rgba(37,87,168,1) 0%,rgba(41,137,216,1) 28%,rgba(75,205,234,1) 100%); /* IE10+ */
+background: linear-gradient(45deg,  rgba(37,87,168,1) 0%,rgba(41,137,216,1) 28%,rgba(75,205,234,1) 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2557a8', endColorstr='#4bcdea',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+
+    overflow: hidden;
+}
+
+#nav-logo, #nav-plane, #nav-cog {
+    max-height: 28px;
+    margin-top: 3px;
+}
+
+.bar.bar-calm .title {
+    color: #4D94B9;
+}
+
+#nav-plane {
+    margin-left: 4px;
+}

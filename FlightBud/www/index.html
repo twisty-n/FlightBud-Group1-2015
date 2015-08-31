@@ -34,11 +34,19 @@
     <ion-nav-bar class="bar-calm" ng-controller="NavigationCtrl">
       <ion-nav-back-button>
       </ion-nav-back-button>
+      <ion-nav-buttons side="center">
+      </ion-nav-buttons>
       <ion-nav-buttons side="right">
           <!-- You can tweak these and make them nice Al :)  -->
-          <button class="button button-balanced ion-plane" ng-click="goToFlights()"></button>
+          <img id="nav-logo" src="img/logo.png"  ng-click="goToDash()"/>
+
+          <img id="nav-plane" src="img/plane_2.png" ng-click="goToFlights()"/>
+
+          <img id="nav-cog" src="img/cog.png" ng-click="goToAccount()"/>
+          
+<!--           <button class="button button-balanced ion-plane" ng-click="goToFlights()"></button>
            <button class="button button-dark ion-ios-list" ng-click="goToDash()"></button>
-          <button class="button button-assertive ion-gear-a" ng-click="goToAccount()"></button>
+          <button class="button button-assertive ion-gear-a" ng-click="goToAccount()"></button> -->
       </ion-nav-buttons>  
     </ion-nav-bar>
     <!--
