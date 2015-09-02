@@ -31,6 +31,7 @@ angular.module('starter.services', [])
       }
       
       var parseFlights = function(results) {
+            userFlights = {};
             var journeys = results.data.user.journeys;
 
             var upcoming = {};
@@ -57,8 +58,8 @@ angular.module('starter.services', [])
                         price: j.price,
                         flightCode: firstFlight.flightNumber,
                         airline: firstFlight.airline,
-                        departureTime: new Date(firstFlight.departure_time).toISOString(),
-                        arrivalTime: new Date(lastFlight.arrival_time).toISOString()
+                        departureTime: new Date(firstFlight.departure_time).toLocaleString(),
+                        arrivalTime: new Date(lastFlight.arrival_time).toLocaleString()
                     };
                     if (i == 0) { nextFlight = upcoming[j.id]; } // Set the first flight
                 }
@@ -67,7 +68,7 @@ angular.module('starter.services', [])
             console.log(upcoming);
             this.userFlights = upcoming;
             saveUserFlights();
-            return upcoming;
+            return $localstorage.getObject('userFlights');
       };
       
       var loadUserFlights = function() {
@@ -479,7 +480,7 @@ angular.module('starter.services', [])
                     weatherObject.fiveDayForecast.push
                     (
                         {
-                            utcForecastTime: weatherDatum.dt_txt,
+                            utcForecastTime: date.toLocaleString(),
                             mainText: weatherDatum.weather[0].main,
                             description: weatherDatum.weather[0].description,
                             windSpeed: weatherDatum.wind.speed,

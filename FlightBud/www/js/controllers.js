@@ -1,6 +1,7 @@
 angular.module('starter.controllers', ['ionic'])
 
-    .controller('FlightManagementCtrl', function($scope, $localstorage, $state, flights) {
+    .controller('FlightManagementCtrl', function($scope, $localstorage, $state, flights
+        ,FlightPubService, $window) {
         
         if ($localstorage.get('userEmail', "null") == "null") {
                 $state.go('login');
@@ -8,8 +9,9 @@ angular.module('starter.controllers', ['ionic'])
         $scope.flights = flights;
         
         $scope.doRefresh = function() {
-            $state.go($state.current, {forceRefresh:true}, {reload: true});
             $scope.$broadcast('scroll.refreshComplete');
+            $state.go($state.current, {forceRefresh:true}, {reload: true});
+            $window.location.reload(true);
         }
         
     })
