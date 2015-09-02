@@ -7,6 +7,11 @@ angular.module('starter.controllers', ['ionic'])
         }
         $scope.flights = flights;
         
+        $scope.doRefresh = function() {
+            $state.go($state.current, {forceRefresh:true}, {reload: true});
+            $scope.$broadcast('scroll.refreshComplete');
+        }
+        
     })
 
     .controller('NavigationCtrl', function ($scope, $localstorage, $state) {

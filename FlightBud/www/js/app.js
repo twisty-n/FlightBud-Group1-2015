@@ -93,9 +93,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                 url: '/flights',
                 templateUrl: 'templates/flights.html',
                 controller: 'FlightManagementCtrl',
+                params: {
+                    forceRefresh: false    // Set default to -1 if none provided
+                },
                 resolve: {
-                    flights: function(FlightPubService) {
-                        return FlightPubService.loadUpcomingFlights();
+                    flights: function(FlightPubService, $stateParams) {
+                        return FlightPubService.loadUpcomingFlights($stateParams.forceRefresh);
                     }
                 }
             });

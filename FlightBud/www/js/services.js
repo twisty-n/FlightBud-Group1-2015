@@ -57,8 +57,8 @@ angular.module('starter.services', [])
                         price: j.price,
                         flightCode: firstFlight.flightNumber,
                         airline: firstFlight.airline,
-                        departureTime: firstFlight.departure_time,
-                        arrivalTime: lastFlight.arrival_time
+                        departureTime: new Date(firstFlight.departure_time).toISOString(),
+                        arrivalTime: new Date(lastFlight.arrival_time).toISOString()
                     };
                     if (i == 0) { nextFlight = upcoming[j.id]; } // Set the first flight
                 }
@@ -80,7 +80,7 @@ angular.module('starter.services', [])
           }, function(error) {
               $log.log("Unable to get flights")
               $log.log(error);
-              return [];
+              return userFlights;
           })
       };
       
@@ -89,8 +89,9 @@ angular.module('starter.services', [])
               return authenticateUser(creds);
           },
           
-          loadUpcomingFlights: function() {
-              return loadUserFlights();
+          loadUpcomingFlights: function(forceRefresh) {
+              if(forceRefresh) return loadUserFlights();
+              return userFlights;
           },
           get: function(id) {
               return userFlights[id];
