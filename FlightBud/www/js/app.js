@@ -44,34 +44,34 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                 templateUrl: 'templates/dashboard.html',
                 controller: 'DashboardCtrl',
                 resolve: {                    
-                    flight: function(FlightsService, $stateParams) {
+                    flight: function(FlightPubService, $stateParams) {
                         // Handle the no route case. Defaults to first flight
                         // TODO: test this logic works
-                        if ($stateParams.flightId == -1) { return FlightsService.nextFlightToLeave(); }
-                        return FlightsService.get($stateParams.flightId);
+                        if ($stateParams.flightId == -1) { return FlightPubService.nextFlightToLeave(); }
+                        return FlightPubService.get($stateParams.flightId);
                     },
-                    weather: function(WeatherService, FlightsService, $stateParams) {
+                    weather: function(WeatherService, FlightPubService, $stateParams) {
                         var flightId = $stateParams.flightId;
                         return WeatherService.getAndUpdateWeatherSet
                         (
                                 (flightId != -1) ? 
-                                FlightsService.get(flightId).destination : 
-                                FlightsService.nextFlightToLeave().destination
+                                FlightPubService.get(flightId).destination : 
+                                FlightPubService.nextFlightToLeave().destination
                         );
                     },
-                    checklist: function(ChecklistService, $stateParams, FlightsService) {
+                    checklist: function(ChecklistService, $stateParams, FlightPubService) {
                         var flightId = $stateParams.flightId;                        
                         return ChecklistService.retrieveChecklist(
                             (flightId != -1) ? 
                                 flightId : 
-                                FlightsService.nextFlightToLeave().id
+                                FlightPubService.nextFlightToLeave().id
                         );
                     },
-                    locationListing: function(LocationInformationService, $stateParams, FlightsService) {
+                    locationListing: function(LocationInformationService, $stateParams, FlightPubService) {
                         var flightId = $stateParams.flightId;
                         var destination  =  ((flightId != -1) ? 
-                                FlightsService.get(flightId).destination : 
-                                FlightsService.nextFlightToLeave().destination);
+                                FlightPubService.get(flightId).destination : 
+                                FlightPubService.nextFlightToLeave().destination);
                         return LocationInformationService.getListingForCategory(destination);
                     }
                 }
@@ -92,7 +92,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
             .state('all-flights', {
                 url: '/flights',
                 templateUrl: 'templates/flights.html',
-                controller: 'FlightManagementCtrl'
+                controller: 'FlightManagementCtrl',
+                resolve: {
+                    flights: function(FlightPubService) {
+                        return FlightPubService.loadUpcomingFlights();
+                    }
+                }
             });
 
         // if none of the above states are matched, use this as the fallback

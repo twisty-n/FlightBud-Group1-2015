@@ -1,11 +1,11 @@
 angular.module('starter.controllers', ['ionic'])
 
-    .controller('FlightManagementCtrl', function($scope, $localstorage, $state, FlightsService) {
+    .controller('FlightManagementCtrl', function($scope, $localstorage, $state, flights) {
         
         if ($localstorage.get('userEmail', "null") == "null") {
                 $state.go('login');
         }
-        $scope.flights = FlightsService.all();
+        $scope.flights = flights;
         
     })
 
@@ -422,10 +422,10 @@ angular.module('starter.controllers', ['ionic'])
             $log.log(userCredentials.password);
             FlightPubService.authenticate(userCredentials).then(function(result){
                 // Save the user details to local storage
-                $localstorage.set('userEmail',      $scope.email);
-                $localstorage.set('userPassword',   $scope.password);
-                $localstorage.set('deviceKey', result.data.access_token);
-                $localstorage.set('userId', result.data.access_token)
+                $localstorage.set('userEmail',      userCredentials.email);
+                $localstorage.set('userPassword',   userCredentials.password);
+                $localstorage.set('deviceKey', result.data.api_key.access_token);
+                $localstorage.set('userId', result.data.api_key.user_id)
                 // Make it so we can't go back to login
                 $ionicViewService.nextViewOptions({
                     disableBack: true

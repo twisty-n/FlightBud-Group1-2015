@@ -3,10 +3,11 @@
 angular.module('starter.services', [])
 
 
-    .factory('FlightPubService', function($log, $http) {
+    .factory('FlightPubService', function($log, $http, $localstorage) {
       
       var fpUrl = "http://192.168.0.14:3000";
       var authUrl = "/api/session";
+      var userUrl = "/api/users/";
       
       /**
        * Log a user in and get a key for the device
@@ -21,10 +22,83 @@ angular.module('starter.services', [])
           return $http.get(url);
       };
       
+      
+      var userFlights = $localstorage.getObject('userFlights', {});
+      var nextFlight = $localstorage.getObject('nextFlight', null);
+      
+      var saveUserFlights = function() {
+          $localstorage.setObject('userFlights', this.userFlights);
+      }
+      
+      var parseFlights = function(results) {
+            var journeys = results.data.user.journeys;
+
+            var upcoming = {};
+            
+            function parseDate(input) {
+                var parts = input.match(/(\d+)/g);
+                // new Date(year, month [, date [, hours[, minutes[, seconds[, ms]]]]])
+                return new Date(parts[0], parts[1]-1, parts[2], parts[3], parts[4], parts[5]); // months are 0-based
+            }
+            
+            journeys.forEach(function(journey, i)
+            {
+                var j = journey.journey.journey;
+                var firstFlight = j.flights[0].flight;
+                var lastFlight = j.flights[j.flights.length-1].flight;
+                if(journey.save_type === 'purchased_flight' 
+                && parseDate(j.departure_time) > new Date())
+                {
+                    upcoming[j.id] = {
+                        id: j.id,
+                        origin: j.origin,
+                        destination: j.destination,
+                        flight_time: j.flight_time,
+                        price: j.price,
+                        flightCode: firstFlight.flightNumber,
+                        airline: firstFlight.airline,
+                        departureTime: firstFlight.departure_time,
+                        arrivalTime: lastFlight.arrival_time
+                    };
+                    if (i == 0) { nextFlight = upcoming[j.id]; } // Set the first flight
+                }
+            });
+            console.log('Upcoming: ');
+            console.log(upcoming);
+            this.userFlights = upcoming;
+            saveUserFlights();
+            return upcoming;
+      };
+      
+      var loadUserFlights = function() {
+          var url = fpUrl + userUrl + $localstorage.get('userId');
+          $log.log(url);
+          return $http.get(url).then(function(result) {
+              
+              return parseFlights(result);
+              
+          }, function(error) {
+              $log.log("Unable to get flights")
+              $log.log(error);
+              return [];
+          })
+      };
+      
       return {
           authenticate: function(creds) {
               return authenticateUser(creds);
-          }
+          },
+          
+          loadUpcomingFlights: function() {
+              return loadUserFlights();
+          },
+          get: function(id) {
+              return userFlights[id];
+          },
+          nextFlightToLeave: function() {
+            // Assume its at the tip of the array
+            return nextFlight;
+        }
       }
     })
 
