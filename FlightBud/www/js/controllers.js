@@ -396,7 +396,10 @@ angular.module('starter.controllers', ['ionic'])
         $localstorage, 
         $state, 
         $ionicViewService,
-        $ionicNavBarDelegate) 
+        $ionicNavBarDelegate,
+        FlightPubService,
+        $ionicPopup
+    ) 
     {
             
         // Stop back bar appearing
@@ -407,31 +410,28 @@ angular.module('starter.controllers', ['ionic'])
         /**
          * Performs the user login and the initial application config
          */
-        $scope.doLogin = function () {
+        $scope.doLogin = function (creds) {
         
             // Perform an API request
             // We'll need to have  a stub here
             // If successful, save the credenials, and return
             var userCredentials = {};
-            userCredentials.email = $scope.email;
-            userCredentials.password = $scope.password
+            userCredentials.email = creds.email;
+            userCredentials.password = creds.password
             $log.log(userCredentials.email);
             $log.log(userCredentials.password);
-            {
-                // This will be in the callback
-            
+            FlightPubService.authenticate(userCredentials).then(function(result){
                 // Save the user details to local storage
                 $localstorage.set('userEmail',      $scope.email);
                 $localstorage.set('userPassword',   $scope.password);
-                
+                $localstorage.set('deviceKey', result.data.access_token);
+                $localstorage.set('userId', result.data.access_token)
                 // Make it so we can't go back to login
                 $ionicViewService.nextViewOptions({
                     disableBack: true
                 });
-                
                 // Set up initial app stuff
                 if ($localstorage.get('firstOpen', "null") == "null") {
-                    
                     // We really should defer this to some utiliy function, but whatever
                     $localstorage.set('firstOpen', false);
                     $localstorage.setObject("userSettings", {landingPage: true});
@@ -439,7 +439,6 @@ angular.module('starter.controllers', ['ionic'])
                     $localstorage.setObject("cachedListings", {});
                     $localstorage.setObject("checklists", {});
                     $state.go('all-flights');
-                    
                 } else {
                     // Just trust me
                     $state.go
@@ -450,12 +449,15 @@ angular.module('starter.controllers', ['ionic'])
                         ) 
                     )
                 }
-            }
-            // Any device or sessoin key
-            // else, signal error
-            
-            // Set up initial a
-        
-        }
+            }, function(error) {
+                angular.element(document.querySelector("#death")).attr('src', 'fp_main.png');
+                $ionicPopup.alert({
+                    title: 'We done screwed up. Or you did',
+                    template: 'Unable to login :('
+                });
+            });
+            angular.element(document.querySelector("#death")).attr('src', 'loader.gif');
+
+        } // end doLogin
 
     });

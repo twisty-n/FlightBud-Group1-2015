@@ -2,6 +2,32 @@
 
 angular.module('starter.services', [])
 
+
+    .factory('FlightPubService', function($log, $http) {
+      
+      var fpUrl = "http://192.168.0.14:3000";
+      var authUrl = "/api/session";
+      
+      /**
+       * Log a user in and get a key for the device
+       * credentials = { email:"", password: "" }
+       * A http promise that the user has to handle
+       */
+      var authenticateUser = function(credentials) {
+          var url = fpUrl + authUrl + "?email="+credentials.email + "&password=" + credentials.password;
+          $log.log("Auth url = " + url);
+          
+          // Make the request
+          return $http.get(url);
+      };
+      
+      return {
+          authenticate: function(creds) {
+              return authenticateUser(creds);
+          }
+      }
+    })
+
     .factory('OauthSignature', ['$window', function($window) {
         return $window.oauthSignature;
     }])

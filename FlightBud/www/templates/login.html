@@ -6,20 +6,20 @@
             <h1 class="title">FlightBud</h1>
         </div>
         <div>
-            <div style="width: 95%; margin-left: auto; margin-right: auto;">
+            <div id="death" style="width: 95%; margin-left: auto; margin-right: auto;">
                 <img src="img/fp_main.png">
             </div>
         </div>
-        <form ng-controller="AuthCtrl">
+        <form ng-submit="doLogin(creds)">
             <div class="list list-inset">
                 <label class="item item-input">
-                    <input type="email" placeholder="Email" ng-model="email">
+                    <input type="email" placeholder="Email" ng-model="creds.email">
                 </label>
                 <label class="item item-input">
-                    <input type="password" placeholder="Password" ng-model="password">
+                    <input type="password" placeholder="Password" ng-model="creds.password">
                 </label>
             </div>
-            <button class="button button-block button-calm" ng-click="doLogin()">Get Started</button>
+            <button class="button button-block button-calm">Get Started</button>
         </form>
 
         <br/>
