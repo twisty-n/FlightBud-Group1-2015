@@ -11,7 +11,7 @@ angular.module('starter.controllers', ['ionic'])
         $scope.doRefresh = function() {
             $scope.$broadcast('scroll.refreshComplete');
             $state.go($state.current, {forceRefresh:true}, {reload: true});
-            $window.location.reload(true);
+            //$window.location.reload(true);
         }
         
     })

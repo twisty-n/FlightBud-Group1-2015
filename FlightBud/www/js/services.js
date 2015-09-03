@@ -5,7 +5,7 @@ angular.module('starter.services', [])
 
     .factory('FlightPubService', function($log, $http, $localstorage) {
       
-      var fpUrl = "http://192.168.0.14:3000";
+      var fpUrl = "http://localhost:3000";
       var authUrl = "/api/session";
       var userUrl = "/api/users/";
       

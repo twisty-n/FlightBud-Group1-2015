@@ -93,6 +93,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                 url: '/flights',
                 templateUrl: 'templates/flights.html',
                 controller: 'FlightManagementCtrl',
+                cache: false,
                 params: {
                     forceRefresh: false    // Set default to -1 if none provided
                 },
