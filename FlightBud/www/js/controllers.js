@@ -247,6 +247,11 @@ angular.module('starter.controllers', ['ionic'])
             $scope.refreshList();
         };
         
+        $scope.addItem = function(todoItem) {
+            checklist.addItem(todoItem);
+            $scope.refreshList();
+        }
+        
         $scope.refreshList = function() {
             if ($scope.currentCheckListView == 'all') {$scope.showAllTasks(); return;}
             if ($scope.currentCheckListView == 'pending') {$scope.showPendingTasks(); return;}

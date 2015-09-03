@@ -263,8 +263,8 @@ angular.module('starter.services', [])
                 checklist.addItem = function(itemName) {
                     checklist.categories.my_items.categoryItems.push(
                         {
-                                name: "Organise an adventure with FlightHub. Your travel experts!",
-                                completed: true
+                                name: itemName,
+                                completed: false
                         }
                     );
                 };

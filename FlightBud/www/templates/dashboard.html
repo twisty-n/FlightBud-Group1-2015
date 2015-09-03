@@ -120,7 +120,12 @@
 			</div>
 		</div>
 		<!-- End list -->
-		
+		<div class="item item-input-inset">
+			<label class="item-input-wrapper">
+            	<input type="text" id="message-box"  maxlength="140" placeholder="Item" ng-model="todoItem">
+        	</label>
+        	<button class="button ion-icon ion-plus-round button-clear button-dark" ng-click="addItem(todoItem)"></button>
+		</div>
 		<!-- Teh modifiers -->
 		<div class="item tabs tabs-secondary tabs-icon-left"> 
 			<a class="tab-item" href="#" ng-click="showPendingTasks()">
