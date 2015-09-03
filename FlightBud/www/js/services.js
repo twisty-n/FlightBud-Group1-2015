@@ -67,6 +67,7 @@ angular.module('starter.services', [])
             console.log('Upcoming: ');
             console.log(upcoming);
             this.userFlights = upcoming;
+            if (upcoming == {}) { nextFlight = {}; }
             saveUserFlights();
             return $localstorage.getObject('userFlights');
       };
@@ -276,10 +277,17 @@ angular.module('starter.services', [])
                     var items = checklist.categories[itemCategory].categoryItems;
                     var length = items.length;
                     for (var i = 0; i<length; i++) {
-                        if ( items[i].name == itemName && items[i].completed == false ) {
-                            checklist.completedItems++;
-                            items[i].completed = true;
-                            break;
+                        if ( items[i].name == itemName  ) {
+                            if (items[i].completed == false) {
+                                checklist.completedItems++;
+                                items[i].completed = true;
+                                break;
+                            } else {
+                                // Un mark the item as complete
+                                checklist.completedItems--;
+                                items[i].completed = false;
+                                break;
+                            }
                         }
                     }
                 };

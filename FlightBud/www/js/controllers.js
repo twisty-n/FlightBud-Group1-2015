@@ -49,8 +49,10 @@ angular.module('starter.controllers', ['ionic'])
                 $state.go('login');
             } 
             // TODO: whenever we renter the view, refresh the content
+                    // Set up variables
+            if (flight == null || flight == undefined) { $state.go('all-flights'); }
         });
-        
+        $scope.flight = flight;
         $scope.$on('$ionicView.leave', function (e) {
             ChecklistService.saveChecklist($scope.flight.id, $scope.checklist);
             flight = null;
@@ -166,9 +168,6 @@ angular.module('starter.controllers', ['ionic'])
                 }
             }
         }
-        
-        // Set up variables
-        $scope.flight = flight;
         
         $scope.prettyLength= function(length) {
             var minutes = (length % 60);
